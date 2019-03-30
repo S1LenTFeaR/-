@@ -1,20 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 int main()
 {
-int C=0, i=0, Sum=0, Arr[20]={-5, 6, -8, -25, -35, -47, 12, 34, 78, -5987, 11, 12, 13, 14, 15, 16, 17, 18, -19, 20};
-while (Arr[i] <= 0)
+int C=0, i, N=0, Arr[50];
+ srand(time(NULL));
+for(i=0;i<50;i++)
 {
-    i++;
+    Arr[i]=(2+rand()%4);
+    printf("%d ",Arr[i]);
+    if(Arr[i]>2)
+    {
+    }
+    else
+    {
+        N+=1;
+    }
 }
-i++;
-while (Arr[i] <= 0)
-{
-    Sum += Arr[i];
-    i++;
-    printf("Sum+Arr[%d]=%d\t", i, Sum);
-}
-printf("\nSUM=%d", Sum);
+printf("\nN=%d",N);
 return 0;
 }
