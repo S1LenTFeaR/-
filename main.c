@@ -3,50 +3,38 @@
 #include <math.h>
 int main()
 {
-int C=8, O=0, o=0, i, Arr[9];
+int Arr[9],i,O[10],C[10],c=0,o=0,cc=0,oo=0;
 srand(time(NULL));
 for(i=0;i<9;i++)
 {
     Arr[i]=rand()%5;
     printf("%d ",Arr[i]);
 }
-
+printf("\n");
 for(i=0;i<9;i++)
 {
     if(Arr[i]==0)
     {
+        O[o]=Arr[i];
         o++;
     }
     else
     {
-    }
-}
-for(i=0;i<(9-o);i++)
-{
-    if(Arr[i]==0)
-    {
-        if(Arr[C-O]!=0)
-        {
-            Arr[i]=Arr[C-O];
-            Arr[C-O]=0;
-            O++;
-        }
-        else
-        {
-            O++;
-            Arr[i]=Arr[C-O];
-            Arr[C-O]=0;
-        }
-    }
-    else
-    {
+        C[c]=Arr[i];
+        c++;
 
     }
 }
-    printf("\n");
-for(i=0;i<9;i++)
+cc=c;
+oo=o;
+for(c=0;c<cc;c++)
 {
-    printf("%d ",Arr[i]);
+    printf("%d ",C[c]);
 }
+for(o=0;o<oo;o++)
+{
+    printf("%d ",O[o]);
+}
+
 return 0;
 }
