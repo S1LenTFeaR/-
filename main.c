@@ -1,40 +1,53 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <time.h>
 int main()
 {
-int Arr[9],i,O[10],C[10],c=0,o=0,cc=0,oo=0;
+int C, O=0, o=0, i, N=10, Arr[N];
 srand(time(NULL));
-for(i=0;i<9;i++)
+for(i=0;i<N;i++)
 {
     Arr[i]=rand()%5;
     printf("%d ",Arr[i]);
 }
-printf("\n");
-for(i=0;i<9;i++)
+
+for(i=0;i<N;i++)
 {
     if(Arr[i]==0)
     {
-        O[o]=Arr[i];
         o++;
     }
     else
     {
-        C[c]=Arr[i];
-        c++;
+    }
+}
+C=i-1;
+for(i=0;i<(N-o);i++)
+{
+    if(Arr[i]==0)
+    {
+        if(Arr[C-O]!=0)
+        {
+            Arr[i]=Arr[C-O];
+            Arr[C-O]=0;
+            O++;
+        }
+        else
+        {
+            O++;
+            i--;
+        }
+    }
+    else
+    {
 
     }
 }
-cc=c;
-oo=o;
-for(c=0;c<cc;c++)
+    printf("\n");
+for(i=0;i<N;i++)
 {
-    printf("%d ",C[c]);
+    printf("%d ",Arr[i]);
 }
-for(o=0;o<oo;o++)
-{
-    printf("%d ",O[o]);
-}
-
 return 0;
 }
