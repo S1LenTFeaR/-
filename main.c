@@ -1,26 +1,30 @@
-/*Программа №2 с лабораторной работы №8*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-int SUM(int *arr)
-{
-    int i=0, Sum=0;
-    while (arr[i] <= 0)
-    {
-        i++;
-    }
-    i++;
-    while (arr[i] <= 0)
-    {
-        Sum += arr[i];
-        i++;
-    }
-    return Sum;
-}
 int main()
 {
-int Sum, Arr[20]={-5, 6, -8, -25, -35, -47, 12, 34, 78, -5987, 11, 12, 13, 14, 15, 16, 17, 18, -19, 20}, *arr;
-arr=&Arr;
-printf("\nSUM=%d\n",SUM(&Arr));
-return 0;
+    int N=0, i=0;
+    char *A, *B, C, Arr[]="If we cannot do as we would we";
+    N = strlen(Arr);
+    N--;
+    A=&Arr[0];
+    B=&Arr[N];
+    printf("%s\n", Arr);
+    for(i=0;i<N;i++)
+    {
+        if(i<N-i)
+        {
+            C=*A;
+            *A=*B;
+            *B=C;
+            A++;
+            B--;
+        }
+        else
+        {
+            i++;
+        }
+    }
+    printf("%s\n", Arr);
+    return 0;
 }
