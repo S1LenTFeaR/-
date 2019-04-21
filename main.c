@@ -1,41 +1,45 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+#define M 7
+#define N 7
 #include <time.h>
 #include <locale.h>
-#define N 6
-#define M 6
 int main()
 {
     setlocale(LC_ALL, "Rus");
-    int i, j, C=0, sum=0, SUM=0;
-    int Arr[N][M];
-    for(i=0;i<N;i++)
+    int Arr[M][N];
+    int i, j, s, R, C=0, n=0;
+    srand(time(NULL));
+    printf("Начальная матрица\n");
+    for(i=0;i<M;i++)
     {
-        printf("Строка %d|", i+1);
-        for(j=0;j<M;j++)
+        for(j=0;j<N;j++)
         {
-            Arr[i][j]=rand()%2;
-            printf("%4d",Arr[i][j]);
+            Arr[i][j]=rand()%20+1;
+            printf("%6d",Arr[i][j]);
         }
         printf("\n");
     }
-    C+=Arr[0][0];
-    for (i = 0; i<N-1; i++)
-    {
-        sum=0;
-        for (j = 0; j<M; j++)
-        {
-            C = Arr[i][j]*Arr[i+1][j];
-            sum+=abs(C);
-        }
-        SUM+=sum;
-        printf("\nСкалярное произведение  %d и %d строк по модулю = %d", i+1, i+2, sum);
-    }
+    printf("\nВведите кратное номера строк R = ");
+    scanf("%d", &R);
+    printf("\nВведите кратное номера столбцов s = ");
+    scanf("%d", &s);
     printf("\n");
-    printf("\nСумма скалярных произведений по модулю = %d\n", SUM);
-    if(SUM==0)
-        printf("\nМатрица - ортонормированная");
-    else
-        printf("\nМатрица - Неортонормированная\n");
-    return 0;
+    for(i=0;i<M;i++)
+    {
+        for(j=0;j<N;j++)
+        {
+            if((j%s==0) && (i%R==0))
+            {
+                C+=Arr[i][j];
+                printf("[%d][%d] C=%d\n", i, j, C);
+                n++;
+            }
+            else
+            {
+
+            }
+        }
+    }
+    printf("\nСумма = %d\n", C/n);
+return 0;
 }
