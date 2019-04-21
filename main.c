@@ -1,45 +1,67 @@
 #include<stdio.h>
-#define M 7
-#define N 7
-#include <time.h>
+#define M 6
+#define N 6
 #include <locale.h>
+
 int main()
 {
     setlocale(LC_ALL, "Rus");
-    int Arr[M][N];
-    int i, j, s, R, C=0, n=0;
-    srand(time(NULL));
-    printf("Начальная матрица\n");
-    for(i=0;i<M;i++)
-    {
-        for(j=0;j<N;j++)
+    int Arr[M][N]={
+    {1, -2, 3, -4, 5, -6},
+    {-1, 2, -3, 4, -5, 6},
+    {-1, 2, -3, -4, 5, 6},
+    {-1, 2, 3, 4, -5, 6},
+    {1, 2, -3, 4, 5, 6},
+    {-1, 2, -3, 4, -5, 6}
+    };
+    int arr[M][N-1];
+    int i, j, C;
+        printf("Начальная матрица\n");
+        for(i=0;i<M;i++)
         {
-            Arr[i][j]=rand()%20+1;
-            printf("%6d",Arr[i][j]);
+            printf("Строка %d| ", i+1);
+            for(j=0;j<N;j++)
+                {
+                printf("%d ",Arr[i][j]);
+                }
+                printf("\n");
         }
         printf("\n");
-    }
-    printf("\nВведите кратное номера строк R = ");
-    scanf("%d", &R);
-    printf("\nВведите кратное номера столбцов s = ");
-    scanf("%d", &s);
-    printf("\n");
-    for(i=0;i<M;i++)
-    {
-        for(j=0;j<N;j++)
-        {
-            if((j%s==0) && (i%R==0))
+
+        for(i=0;i<M;i++)
+        {       for(j=0;j<(N-1);j++)
             {
-                C+=Arr[i][j];
-                printf("[%d][%d] C=%d\n", i, j, C);
-                n++;
+                arr[i][j]=Arr[i][j]*Arr[i][j+1];
+                printf("%d ",arr[i][j]);
             }
-            else
+                printf("\n");
+        }
+        printf("\n");
+        for(i=0;i<M;i++)
+        {       for(j=0;j<(N-1);j++)
             {
+                if(arr[i][j]<0)
+                {
+                    C=1;
+                }
+                else
+                {
+                    C=0;
+                    i++;
+                    j=0;
+                }
 
             }
+                if(C=1)
+                {
+                    if(i<M)
+                    {
+                    printf("Знаки чередуются в строке %d", i+1);
+                    }
+                }
+                printf("\n");
         }
-    }
-    printf("\nСумма = %d\n", C/n);
-return 0;
+
+
+    return 0;
 }
