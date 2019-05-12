@@ -1,67 +1,37 @@
 #include<stdio.h>
-#define M 6
-#define N 6
-#include <locale.h>
+#define i 3
+struct stars {
+    char Class;
+    double m;
+    double Share;
+    int Number;
+} arr[i];
 
 int main()
 {
-    setlocale(LC_ALL, "Rus");
-    int Arr[M][N]={
-    {1, -2, 3, -4, 5, -6},
-    {-1, 2, -3, 4, -5, 6},
-    {-1, 2, -3, -4, 5, 6},
-    {-1, 2, 3, 4, -5, 6},
-    {1, 2, -3, 4, 5, 6},
-    {-1, 2, -3, 4, -5, 6}
-    };
-    int arr[M][N-1];
-    int i, j, C;
-        printf("Начальная матрица\n");
-        for(i=0;i<M;i++)
-        {
-            printf("Строка %d| ", i+1);
-            for(j=0;j<N;j++)
-                {
-                printf("%d ",Arr[i][j]);
-                }
-                printf("\n");
-        }
-        printf("\n");
+    int k;
+    arr[0].Class = 'O';
+    arr[0].m = 32;
+    arr[0].Share = 0.00002;
+    arr[0].Number = 55000;
 
-        for(i=0;i<M;i++)
-        {       for(j=0;j<(N-1);j++)
-            {
-                arr[i][j]=Arr[i][j]*Arr[i][j+1];
-                printf("%d ",arr[i][j]);
-            }
-                printf("\n");
-        }
-        printf("\n");
-        for(i=0;i<M;i++)
-        {       for(j=0;j<(N-1);j++)
-            {
-                if(arr[i][j]<0)
-                {
-                    C=1;
-                }
-                else
-                {
-                    C=0;
-                    i++;
-                    j=0;
-                }
+    arr[1].Class = 'F';
+    arr[1].m = 1.25;
+    arr[1].Share = 2.9;
+    arr[1].Number = 12000000000;
 
-            }
-                if(C=1)
-                {
-                    if(i<M)
-                    {
-                    printf("Знаки чередуются в строке %d", i+1);
-                    }
-                }
-                printf("\n");
-        }
-
-
-    return 0;
+    arr[i-1].Class = 'M';
+    arr[i-1].m = 0.2;
+    arr[i-1].Share = 73.2;
+    arr[i-1].Number = 293000000000;
+    printf("Spectral classes:\n--------------------\n");
+    for(k = 0; k<= i-1; k++)
+    {
+        printf("Class - %c\n", arr[k].Class);
+        printf("m = %lf\n", arr[k].m);
+        printf("Share = %lf\n", arr[k].Share);
+        printf("Number = %d\n", arr[k].Number);
+        printf("--------------------\n");
+    }
+        return 0;
 }
