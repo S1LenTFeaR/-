@@ -1,0 +1,9 @@
+﻿  pch.cpp
+  ConsoleApplication3.cpp
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication3\consoleapplication3.cpp(23): warning C4305: инициализация: усечение из "double" в "float"
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication3\consoleapplication3.cpp(61): warning C4305: +=: усечение из "double" в "float"
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication3\consoleapplication3.cpp(67): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication3\consoleapplication3.cpp(68): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication3\consoleapplication3.cpp(70): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication3\consoleapplication3.cpp(71): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+  ConsoleApplication3.vcxproj -> C:\Users\kille\Desktop\-\ConsoleApplication1\ConsoleApplication3\Debug\ConsoleApplication3.exe
