@@ -8,54 +8,52 @@
 
 using namespace std;
 
-struct document
+struct file
 {
-	int account, count;								//Номер личного счета (account), Количество проживающих (count);
-	double total_area, living_area, total_price;	//Общая площадь, кв.м. (total_area), Жилая площадь, кв.м. (living_area), Общая сумма оплаты, руб (total_price);
-	string name;									//Плательщик (name), ;
-	string address;									//Адрес(address)
+	int dpi, depth, S;					//Разрешение (dpi), Глубина цвета (depth);
+	double size, width, height ;		//Размер файла в байтах, Ширина в пикселях (width), Высота в пикселях (height);
+	string name;						//Имя файла (name) ;
+	string format;						//Формат данных (format);
 };
 
-document ReadDocuments(ifstream & file)
+file ReadFiles(ifstream & files) //Функция для считывания (но не выводит) полей структуры с файла
 {
-	document Document;
-	file >> Document.name;
-	file >> Document.account;
-	file >> Document.address;
-	file >> Document.count;
-	file >> Document.total_area;
-	file >> Document.living_area;
-	file >> Document.total_price;
-	return Document;
+	file File; //Создаем переменную типа File
+	files >> File.name; //Из файла считывается в структуру
+	files >> File.format;
+	files >> File.size;
+	files >> File.height;
+	files >> File.width;
+	files >> File.dpi;
+	files >> File.depth;
+	return File;
 }
 
-void PrintDocuments(document Document)
+void PrintFiles(file File) //Функция для вывода структур на консоль (Которая была считана с ReadFiles)
 {
-	cout << "\n Имя - " << Document.name << endl;
-	cout << " Номер лицевого счета - " << Document.account << endl;
-	cout << " Адрес - " << Document.address << endl;
-	cout << " Количество проживающих - " << Document.count << endl;
-	cout << " Общая площадь, кв.м. - " << Document.total_area << endl;
-	cout << " Жилая площадь, кв.м. - " << Document.living_area << endl;
-	cout << " Сумма оплаты, руб - " << Document.total_price << endl;
+	cout << "\n Имя файла - " << File.name << endl;
+	cout << " Формат файла - " << File.format << endl;
+	cout << " Размер файла - " << File.size << endl;
+	cout << " Высота файла (в пикселях) - " << File.height << endl;
+	cout << " Ширина файла (в пикселях) - " << File.width << endl;
+	cout << " Разрешение - " << File.dpi << endl;
+	cout << " Глубина цвета - " << File.depth << endl;
 }
 
-void First(int N, document *arr) //Первое задание
+void First(int N, file *arr) //Первое задание
 {
-	int k;
-	ofstream first("First.txt");
-	for (k = 0; k < N; k++)
+	int i; //Счетчик
+	char Symbol; //Первый символ, который мы вводим с клавиатуры
+	cout << "\n Введите первый символ названия файлов: ";
+	cin >> Symbol;
+	ofstream first("First.txt"); //Записываем в файл
+	for (i = 0; i < N; i++) //Цыкл
 	{
-		if (arr[k].total_area > 50 || arr[k].living_area > 50)
+		if (arr[i].name[0] == Symbol)
 		{
-			first << "Участник №" << k + 1 << endl;
-			first << "Имя - " << arr[k].name << endl;
-			first << "Номер лицевого счета - " << arr[k].account << endl;
-			first << "Адрес - " << arr[k].address << endl;
-			first << "Количество проживающих - " << arr[k].count << endl;
-			first << "Общая площадь, кв.м. - " << arr[k].total_area << endl;
-			first << "Жилая площадь, кв.м. - " << arr[k].living_area << endl;
-			first << "Сумма оплаты, руб - " << arr[k].total_price << "\n" << endl;
+			first << "Файл №" << i + 1 << endl;
+			first << "Имя файла - " << arr[i].name << endl;
+			first << "Формат файла - " << arr[i].format << "\n" << endl;
 		}
 		else
 		{
@@ -63,57 +61,70 @@ void First(int N, document *arr) //Первое задание
 		}
 	}
 	first.close();
-	cout << "\nЗадание - 1 успешно выполнено в файле First" << endl;
+	cout << "\n Задание - 1 успешно выполнено в файле First.txt" << endl;
 }
 
-void Second(int N, document *arr) //Второе задание
+void Second(int N, file *arr) //Второе задание
 {
-	int k;
-	ofstream second("Second.txt");
-	for (k = 0; k < N; k++)
+	int i;
+	int j=0; //Переменная фиксирует файл с самым большим изображением
+	ofstream second("Second.txt"); //Записываем в файл
+	arr[j].S = arr[j].height * arr[j].width / arr[j].dpi; //Считаем площадь 1-го файла
+	for (i = 1; i < N; i++)
 	{
-		if (arr[k].total_price > 3000 && arr[k].count == 0)
+		arr[i].S = arr[i].height * arr[i].width / arr[i].dpi; //Находим размер файла
+		if (arr[i].S > arr[j].S) //Сравниваем файл k с предидущим самым большим файлом
 		{
-			second << "квартира по адресу: " << arr[k].address << endl;
+			j = i; 
 		}
 		else
 		{
 
 		}
 	}
+	second << "самое большое изображение с именем: " << arr[j].name << endl;
 	second.close();
-	cout << "\nЗадание - 2 успешно выполнено в файле Second" << endl;
+	cout << "\n Задание - 2 успешно выполнено в файле Second.txt" << endl;
 }
 
-int N;
-document *arr;
+int N; //Глобальная переменная, отвечающая за количество файлов
+file *arr; //Создаем указатель на массив структур
 
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
 	
-	ifstream file;
-	file.open("Documents.txt");
-
+	ifstream files; //Открываем (просто открываем) файл для чтения в структуру
+	files.open("Files.txt"); //Открываем файл Files.txt
 	int i;
-	file >> N; //Считываем количество участников
-	arr = new document[N]; //Динамическое выделение памяти под массив размером N
-
+	files >> N; //Считываем количество структур из блокнота
+	arr = new file[N]; //Динамическое выделение памяти под массив размером N
 
 	for (i = 0; i < N; i++) // в цикле считываем из файла
-		arr[i] = ReadDocuments(file);
+		arr[i] = ReadFiles(files);
 
-	for (i = 0; i < N; i++) // в цикле выводим на экран
-		PrintDocuments(arr[i]);
-
+	for (i = 0; i < N; i++) // в цикле выводим на консоль
+		PrintFiles(arr[i]);
 
 	First(N, arr);
 	Second(N, arr);
 
-	file.close();
+	files.close(); 
+					/*Закрытие файла, который был прочтен, запомнен, выведен в консоль, 
+				   использован для 1го и 2го заданий, успешно учавствоал в моей лабораторной 
+				   работе для сдачи и выболнении лабораторной работе, чтобы потом я потом 
+				   показал тетрадку с Вашей подписью Феськову для того, чтобы он поставил мне 
+				   зачёт по предмету объектно-ориентированное программирование, чтобы я получил 
+				   диплом (но до диплома я покушаю в кфс с Алёшей) и поступил на магистратуру 
+				   (если меня не побьют), чтобы ее закончить и поступить на нормальную работу,
+				   чтобы получать зарплату, чтобы платить за кварт плату, ипотеку и страховку машины 
+				   (возможно), чтобы работать на этой работе до конца своих никчемных дней, 
+				   потому что это никому ***** не надо и умереть (скорее всего кремируют, 
+				   так как на гроб нужно много денег, так как он состоитт из древесины, 
+				   которую привозят, скорее всего из сибирских лесов, а леса уменьшаются, 
+				   а бумага стоит все дороже...) спасибо за зачёт)))*/
+	
+	delete [] arr; //Освобождение памяти
 
-	delete[] arr;
 	return 0;
 }
