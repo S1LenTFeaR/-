@@ -1,130 +1,59 @@
-﻿#include "stdafx.h"
-#include "pch.h"
-#include <locale> // поддержка русского алфавита
-#include <iostream> // потоковый ввод/вывод с консоли
-#include <fstream> // файловые потоки
-#include <string> // текстовые строки С++
-#include <Windows.h> // решение проблем кодировки текста
-
+﻿#include "pch.h"
+#include <clocale>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cmath>
 using namespace std;
-
-struct file
-{
-	int dpi, depth, S;					//Разрешение (dpi), Глубина цвета (depth);
-	double size, width, height ;		//Размер файла в байтах, Ширина в пикселях (width), Высота в пикселях (height);
-	string name;						//Имя файла (name) ;
-	string format;						//Формат данных (format);
-};
-
-file ReadFiles(ifstream & files) //Функция для считывания (но не выводит) полей структуры с файла
-{
-	file File; //Создаем переменную типа File
-	files >> File.name; //Из файла считывается в структуру
-	files >> File.format;
-	files >> File.size;
-	files >> File.height;
-	files >> File.width;
-	files >> File.dpi;
-	files >> File.depth;
-	return File;
-}
-
-void PrintFiles(file File) //Функция для вывода структур на консоль (Которая была считана с ReadFiles)
-{
-	cout << "\n Имя файла - " << File.name << endl;
-	cout << " Формат файла - " << File.format << endl;
-	cout << " Размер файла - " << File.size << endl;
-	cout << " Высота файла (в пикселях) - " << File.height << endl;
-	cout << " Ширина файла (в пикселях) - " << File.width << endl;
-	cout << " Разрешение - " << File.dpi << endl;
-	cout << " Глубина цвета - " << File.depth << endl;
-}
-
-void First(int N, file *arr) //Первое задание
-{
-	int i; //Счетчик
-	char Symbol; //Первый символ, который мы вводим с клавиатуры
-	cout << "\n Введите первый символ названия файлов: ";
-	cin >> Symbol;
-	ofstream first("First.txt"); //Записываем в файл
-	for (i = 0; i < N; i++) //Цыкл
-	{
-		if (arr[i].name[0] == Symbol)
-		{
-			first << "Файл №" << i + 1 << endl;
-			first << "Имя файла - " << arr[i].name << endl;
-			first << "Формат файла - " << arr[i].format << "\n" << endl;
-		}
-		else
-		{
-
-		}
-	}
-	first.close();
-	cout << "\n Задание - 1 успешно выполнено в файле First.txt" << endl;
-}
-
-void Second(int N, file *arr) //Второе задание
-{
-	int i;
-	int j=0; //Переменная фиксирует файл с самым большим изображением
-	ofstream second("Second.txt"); //Записываем в файл
-	arr[j].S = arr[j].height * arr[j].width / arr[j].dpi; //Считаем площадь 1-го файла
-	for (i = 1; i < N; i++)
-	{
-		arr[i].S = arr[i].height * arr[i].width / arr[i].dpi; //Находим размер файла
-		if (arr[i].S > arr[j].S) //Сравниваем файл k с предидущим самым большим файлом
-		{
-			j = i; 
-		}
-		else
-		{
-
-		}
-	}
-	second << "самое большое изображение с именем: " << arr[j].name << endl;
-	second.close();
-	cout << "\n Задание - 2 успешно выполнено в файле Second.txt" << endl;
-}
-
-int N; //Глобальная переменная, отвечающая за количество файлов
-file *arr; //Создаем указатель на массив структур
 
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	
-	ifstream files; //Открываем (просто открываем) файл для чтения в структуру
-	files.open("Files.txt"); //Открываем файл Files.txt
-	int i;
-	files >> N; //Считываем количество структур из блокнота
-	arr = new file[N]; //Динамическое выделение памяти под массив размером N
+	float a, x = 0, y = 0, V, t, m, t1, b;
+	float g = 9.80665, pi = 3.14159, e = 2.71828;
+	ofstream Polet("Polet.txt");
 
-	for (i = 0; i < N; i++) // в цикле считываем из файла
-		arr[i] = ReadFiles(files);
+	/* a - угол к горизонту в начале выстрела
+		x,y - координаты
+		V - начальная скорость
+		t,t1 - общее время движения, текущее время
+		b - угол к горизонту в радианах
+		g - ускорение свободного падения
+		pi - число пи
+	*/
 
-	for (i = 0; i < N; i++) // в цикле выводим на консоль
-		PrintFiles(arr[i]);
+	cout << "Угол броска a, град: ";
+	cin >> a;
+	cout << "Введите начальную скорость тела V0: ";
+	cin >> V;
+	cout << endl;
 
-	First(N, arr);
-	Second(N, arr);
+	b = pi * a / 180;  // угол в радианах
+	t = (2 * V*sin(b)) / g; // общее время движения
 
-	files.close(); 
-					/*Закрытие файла, который был прочтен, запомнен, выведен в консоль, 
-				   использован для 1го и 2го заданий, успешно учавствоал в моей лабораторной 
-				   работе для сдачи и выболнении лабораторной работе, чтобы потом я потом 
-				   показал тетрадку с Вашей подписью Феськову для того, чтобы он поставил мне 
-				   зачёт по предмету объектно-ориентированное программирование, чтобы я получил 
-				   диплом (но до диплома я покушаю в кфс с Алёшей) и поступил на магистратуру 
-				   (если меня не побьют), чтобы ее закончить и поступить на нормальную работу,
-				   чтобы получать зарплату, чтобы платить за кварт плату, ипотеку и страховку машины 
-				   (возможно), чтобы работать на этой работе до конца своих никчемных дней, 
-				   потому что это никому ***** не надо и умереть (скорее всего кремируют, 
-				   так как на гроб нужно много денег, так как он состоитт из древесины, 
-				   которую привозят, скорее всего из сибирских лесов, а леса уменьшаются, 
-				   а бумага стоит все дороже...) спасибо за зачёт)))*/
-	
-	delete [] arr; //Освобождение памяти
+	for (t1 = 0; t1 <= t; t1 += 0.05) // вывод координат
+	{
+		x = V * cos(b)*t1;
+		y = V * sin(b)*t1 - g * t1*t1 / 2;
+		cout << "x: " << x << "\t" << "y: " << y << endl;
+		Polet << x << ";" << y << endl;
+	}
+	cout << "x: " << "0.0" << "\t\t" << "y: " << "0.0" << endl;
+	Polet << "0.0" << ";" << y << "0.0" << endl;
+	/*
+	for (t1, t; t1 <= t; t1 = t1 + 0.01) // вывод координат
+	{
+		x = V * cos(b)*t1;
+		printf("x: %f\t", x);
+		fprintf(koord, "%lf;", x);
+		y = V * sin(b)*t1 - g * t1*t1 / 2;
+		printf("y: %f\n", y);
+		fprintf(koord, "%lf\n", y);
+	}*/
 
+	printf("\n");
+	Polet.close();
 	return 0;
 }

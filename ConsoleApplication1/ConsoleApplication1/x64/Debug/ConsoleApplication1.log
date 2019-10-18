@@ -1,4 +1,5 @@
 ﻿  ConsoleApplication1.cpp
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication1\consoleapplication1.cpp(72): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication1\consoleapplication1.cpp(75): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication1\consoleapplication1.cpp(15): warning C4305: инициализация: усечение из "double" в "float"
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication1\consoleapplication1.cpp(36): warning C4305: +=: усечение из "double" в "float"
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication1\consoleapplication1.cpp(14): warning C4101: m: неиспользованная локальная переменная
   ConsoleApplication1.vcxproj -> C:\Users\kille\Desktop\-\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe

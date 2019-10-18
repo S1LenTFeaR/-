@@ -6,7 +6,7 @@
 #include <fstream>
 #include <string>
 #include <cmath>
-#define dt 0.05
+#define dt 0.005
 using namespace std;
 
 int main()

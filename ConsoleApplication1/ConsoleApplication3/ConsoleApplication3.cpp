@@ -6,11 +6,11 @@
 #include <fstream>
 #include <string>
 #include <cmath>
-#define dt 0.05
+#define dt 0.005
 
 struct tmp
 {
-	float Vx, Vy;
+	float Vx, Vy, Vsq;
 	float X, Y;
 }tmp;
 
@@ -55,6 +55,7 @@ int main()
 	tmp.X = 0;
 	tmp.Y = 0;
 
+
 	cout << "x: " << X << "\t\t" << "y: " << Y << endl;
 	Polet << X << ";" << Y << endl;
 
@@ -64,8 +65,9 @@ int main()
 			t1 += t;
 		else
 		{
-			Vx = tmp.Vx - (k / m) * tmp.Vx * dt;
-			Vy = tmp.Vy - (g + (k / m) * tmp.Vy) * dt;
+			tmp.Vsq = sqrt((tmp.Vx * tmp.Vx) + (tmp.Vy * tmp.Vy));
+			Vx = tmp.Vx - ((k / m) * tmp.Vsq * tmp.Vx * dt); 
+			Vy = tmp.Vy - g * dt - ((k / m) * tmp.Vsq * tmp.Vy * dt);
 
 			X = tmp.X + tmp.Vx * dt;
 			Y = tmp.Y + tmp.Vy * dt;
