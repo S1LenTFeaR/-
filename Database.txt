@@ -1,0 +1,50 @@
+CREATE DATABASE ProductShop;
+USE ProductShop;
+SHOW TABLES;
+DROP TABLE Склад;
+DESC TABLE Склад;
+
+CREATE TABLE Склад ( 
+ Тип_продукции VARCHAR(10) NOT NULL PRIMARY KEY,
+ Расположение VARCHAR(20) NOT NULL,
+ Количество_продукции INT NOT NULL
+);
+
+CREATE TABLE Товар ( 
+ Код_товара INT NOT NULL PRIMARY KEY,
+ Количество_продукции INT NOT NULL,
+ Тип_продукции VARCHAR(10) NOT NULL REFERENCES Склад(Тип_продукции) 
+);
+
+CREATE TABLE Покупатель (
+ Номер_покупателя INT NOT NULL PRIMARY KEY,
+ ФИО_покупателя VARCHAR(30) NOT NULL,
+ Номер_телефона INT NOT NULL,
+ Email  VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE ID (
+ ID_ключ INT NOT NULL PRIMARY KEY,
+ Номер_покупателя INT NOT NULL REFERENCES Покупатель(Номер_покупателя),
+ Код_товара INT NOT NULL REFERENCES Товар(Код_товара)
+);
+
+CREATE TABLE Продавец (
+ ФИО_продавца VARCHAR(30) NOT NULL PRIMARY KEY,
+ Номер_телефона INT NOT NULL,
+ Email VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE Чек (
+ Номер_покупки INT NOT NULL PRIMARY KEY,
+ Количество_товара INT NOT NULL,
+ Дата_совершения DATE NOT NULL,
+ Стоимость INT NOT NULL,
+ Номер_покупателя INT NOT NULL REFERENCES Покупатель(Номер_покупателя),
+ ФИО_продавца VARCHAR(30) NOT NULL REFERENCES Продавец(ФИО_продавца)
+);
+
+
+
+
+
