@@ -1,4 +1,5 @@
-﻿#include "pch.h"
+﻿
+#include "pch.h"
 #include <clocale>
 #include <cstdlib>
 #include <cstring>
@@ -6,54 +7,31 @@
 #include <fstream>
 #include <string>
 #include <cmath>
+#define m 60 //Масса Ростика
+#define R 2 //Радиус парашюта
+#define dt 0.05 
+#define c 1.33
+#define p 0.5
+#define h1 0.5
+#define z 0.5
+
 using namespace std;
 
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	float a, x = 0, y = 0, V, t, m, t1, b;
-	float g = 9.80665, pi = 3.14159, e = 2.71828;
-	ofstream Polet("Polet.txt");
+	float k2, g = 9.8, V, yi, h, t, Vi = 0, ti, T, S;
+	S = h1 * z;
 
-	/* a - угол к горизонту в начале выстрела
-		x,y - координаты
-		V - начальная скорость
-		t,t1 - общее время движения, текущее время
-		b - угол к горизонту в радианах
-		g - ускорение свободного падения
-		pi - число пи
-	*/
-
-	cout << "Угол броска a, град: ";
-	cin >> a;
-	cout << "Введите начальную скорость тела V0: ";
-	cin >> V;
-	cout << endl;
-
-	b = pi * a / 180;  // угол в радианах
-	t = (2 * V*sin(b)) / g; // общее время движения
-
-	for (t1 = 0; t1 <= t; t1 += 0.05) // вывод координат
+	k2 = 0.5 * c * S * p;
+	//t = V * m / (k2 * V * V - m * g);
+	for (T = 0; T <= (t = 60); T += dt) // вывод координат
 	{
-		x = V * cos(b)*t1;
-		y = V * sin(b)*t1 - g * t1*t1 / 2;
-		cout << "x: " << x << "\t" << "y: " << y << endl;
-		Polet << x << ";" << y << endl;
+		//T = t - ti;
+		V = Vi + T / 2 * ((m*g - k2 * Vi * Vi) / m + (m * g - k2 * (Vi + T * (m * g - k2 * Vi * Vi) / m)*(Vi + T * (m * g - k2 * Vi * Vi) / m)) / m);
+		Vi = V;
+		cout << V << endl;
 	}
-	cout << "x: " << "0.0" << "\t\t" << "y: " << "0.0" << endl;
-	Polet << "0.0" << ";" << y << "0.0" << endl;
-	/*
-	for (t1, t; t1 <= t; t1 = t1 + 0.01) // вывод координат
-	{
-		x = V * cos(b)*t1;
-		printf("x: %f\t", x);
-		fprintf(koord, "%lf;", x);
-		y = V * sin(b)*t1 - g * t1*t1 / 2;
-		printf("y: %f\n", y);
-		fprintf(koord, "%lf\n", y);
-	}*/
 
-	printf("\n");
-	Polet.close();
 	return 0;
 }
