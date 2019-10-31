@@ -4,47 +4,114 @@ SHOW TABLES;
 DROP TABLE Склад;
 DESC TABLE Склад;
 
-CREATE TABLE Склад ( 
- Тип_продукции VARCHAR(10) NOT NULL PRIMARY KEY,
- Расположение VARCHAR(20) NOT NULL,
- Количество_продукции INT NOT NULL
+
+CREATE TABLE Продукция ( 
+ Название_продукции VARCHAR(10) NOT NULL UNIQUE PRIMARY KEY,
+ Количество_продукции INT NOT NULL,
+ Стоимость_продукции DECIMAL(4,2) NOT NULL
+);
+
+CREATE TABLE Продавец ( 
+ ID_продавца INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+ Имя_продавца VARCHAR(10) NOT NULL,
+ Номер_телефона BIGINT( UNIQUE,
+ eMail VARCHAR(30) UNIQUE
+);
+
+CREATE TABLE Чек ( 
+ Номер_чека INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+ Количество_товаров INT UNSIGNED NOT NULL, 
+ Дата_совершения DATE NOT NULL,
+ Суммарная_стоимость DECIMAL(5,2) UNSIGNED NOT NULL,
+ ID_продавца INT UNSIGNED NOT NULL REFERENCES Продавец(ID_продавца)
 );
 
 CREATE TABLE Товар ( 
- Код_товара INT NOT NULL PRIMARY KEY,
- Количество_продукции INT NOT NULL,
- Тип_продукции VARCHAR(10) NOT NULL REFERENCES Склад(Тип_продукции) 
+ Название_продукции VARCHAR(10) NOT NULL REFERENCES Продукция(Название_продукции),
+ ID_продукта INT UNSIGNED NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY, 
+ Номер_чека INT UNSIGNED REFERENCES Чек(Номер_чека)
 );
 
-CREATE TABLE Покупатель (
- Номер_покупателя INT NOT NULL PRIMARY KEY,
- ФИО_покупателя VARCHAR(30) NOT NULL,
- Номер_телефона INT NOT NULL,
- Email  VARCHAR(30) NOT NULL
-);
+INSERT INTO Продукция VALUES('Хлеб',5,26.00);
+INSERT INTO Продукция VALUES('Лимоад',3,36.00);
+INSERT INTO Продукция VALUES('Лапша',6,10.00);
+INSERT INTO Продукция VALUES('Чизбургер',2,49.00);
 
-CREATE TABLE ID (
- ID_ключ INT NOT NULL PRIMARY KEY,
- Номер_покупателя INT NOT NULL REFERENCES Покупатель(Номер_покупателя),
- Код_товара INT NOT NULL REFERENCES Товар(Код_товара)
-);
+INSERT INTO Товар(Название_продукции) VALUES('Хлеб');
+INSERT INTO Товар(Название_продукции) VALUES('Хлеб');
+INSERT INTO Товар(Название_продукции) VALUES('Хлеб');
+INSERT INTO Товар(Название_продукции) VALUES('Хлеб');
+INSERT INTO Товар(Название_продукции) VALUES('Хлеб');
 
-CREATE TABLE Продавец (
- ФИО_продавца VARCHAR(30) NOT NULL PRIMARY KEY,
- Номер_телефона INT NOT NULL,
- Email VARCHAR(30) NOT NULL
-);
+INSERT INTO Товар(Название_продукции) VALUES('Лимонад');
+INSERT INTO Товар(Название_продукции) VALUES('Лимонад');
+INSERT INTO Товар(Название_продукции) VALUES('Лимонад');
 
-CREATE TABLE Чек (
- Номер_покупки INT NOT NULL PRIMARY KEY,
- Количество_товара INT NOT NULL,
- Дата_совершения DATE NOT NULL,
- Стоимость INT NOT NULL,
- Номер_покупателя INT NOT NULL REFERENCES Покупатель(Номер_покупателя),
- ФИО_продавца VARCHAR(30) NOT NULL REFERENCES Продавец(ФИО_продавца)
-);
+INSERT INTO Товар(Название_продукции) VALUES('Лапша');
+INSERT INTO Товар(Название_продукции) VALUES('Лапша');
+INSERT INTO Товар(Название_продукции) VALUES('Лапша');
+INSERT INTO Товар(Название_продукции) VALUES('Лапша');
+INSERT INTO Товар(Название_продукции) VALUES('Лапша');
+INSERT INTO Товар(Название_продукции) VALUES('Лапша');
+
+INSERT INTO Товар(Название_продукции) VALUES('Чизбургер');
+INSERT INTO Товар(Название_продукции) VALUES('Чизбургер');
+
+INSERT INTO Продавец VALUES(NULL,'Андрей',NULL,NULL);
+INSERT INTO Продавец VALUES(NULL,'Денис',NULL,NULL);
+INSERT INTO Продавец VALUES(NULL,'Евгений',NULL,NULL);
+
+INSERT INTO Чек VALUES(NULL,3,NOW(),72.00,1); 			//Хлеб, лимонад, лапша
+INSERT INTO Чек VALUES(NULL,1,'2019-10-24',49.00,3); 	//Чизбургер
+INSERT INTO Чек VALUES(NULL,3,'2019-10-28',30.00,2);	//Лапша(3)
+INSERT INTO Чек VALUES(NULL,2,'2019-10-29',85.00,3);	//Чизбургер, лимонад
+
+ UPDATE товар
+ SET Номер_чека = 1
+ WHERE ID_продукта = 1;
+ UPDATE товар
+ SET Номер_чека = 1
+ WHERE ID_продукта = 6;
+ UPDATE товар
+ SET Номер_чека = 1
+ WHERE ID_продукта = 9;
+ 
+ UPDATE товар
+ SET Номер_чека = 2
+ WHERE ID_продукта = 15;
+ 
+ UPDATE товар
+ SET Номер_чека = 3
+ WHERE ID_продукта = 10;
+ UPDATE товар
+ SET Номер_чека = 3
+ WHERE ID_продукта = 11;
+ UPDATE товар
+ SET Номер_чека = 3
+ WHERE ID_продукта = 12;
+ 
+ UPDATE товар
+ SET Номер_чека = 4
+ WHERE ID_продукта = 7;
+ UPDATE товар
+ SET Номер_чека = 4
+ WHERE ID_продукта = 16;
+ 
+ UPDATE продавец
+ SET Номер_телефона = 672345
+ WHERE ID_продавца = 1;
+ UPDATE продавец
+ SET eMail = 'Andruha@icloud.com'
+ WHERE ID_продавца = 1;
+ 
+ UPDATE продавец
+ SET Номер_телефона = 88005553535
+ WHERE ID_продавца = 2;
+ UPDATE продавец
+ SET eMail = 'debis@gmail.com'
+ WHERE ID_продавца = 2;
+ 
+ 
 
 
-
-
-
+ 
