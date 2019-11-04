@@ -1,62 +1,51 @@
 ﻿#include "pch.h"
 #include <clocale>
 #include <cstdlib>
+#include <iomanip>
 #include <cstring>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <cmath>
-#define dt 0.005
+#define m 60	//Масса	парашютиста [кг]
+#define R 2		//Радиус парашюта [м]
+#define dt 0.05 //Шаг [с]
+#define c 1.33	//Коэффициент лобового сопротивления
+#define p 1.29	//Плотность среды [кг/м^3]
+#define t 5	//Суммарное время полёта [с]
+
 using namespace std;
 
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	float a, x = 0, y = 0, V, v0x, v0y, t, m, t1, b, k, kof;
-	float g = 9.80665, pi = 3.14159, e = 2.71828;
+	float g = 9.8, pi = 3.14;
+	float V = 0, T = 0, Vi = 0, S, k2, k1;
+
 	ofstream Polet("Polet.txt");
 
-	/* a - угол к горизонту в начале выстрела
-		x,y - координаты
-		V - начальная скорость
-		t,t1 - общее время движения, текущее время
-		b - угол к горизонту в радианах
-		g - ускорение свободного падения
-		pi - число пи
-	*/
+	S = pi * R * R;
+	k2 = 0.5 * c * S * p;
 
-	cout << "k: ";
-	cin >> k;
-	cout << "m: ";
-	cin >> m;
-	cout << "Angle: ";
-	cin >> a;
-	cout << "V: ";
-	cin >> V;
-	cout << endl;
+	cout << fixed << setprecision(3) << "t: " << T << "\t" << "V: " << V << endl;
+	Polet << fixed << setprecision(3) << T << ";" << V << endl;
 
-	b = pi * a / 180;  // угол в радианах
-	t = (2 * V*sin(b)) / g; // общее время движения
-	v0x = V * cos(b);
-	v0y = V * sin(b);
-
-	for (t1 = 0; t1 <= t; t1 += dt) // вывод координат
+	for (T = 0; T <= t; T += dt) // вывод координат
 	{
-		if (y < 0)
-			t1 += t;
-		else
-		{
-			kof = -k * t1 / m;
-			x = v0x * (m / k)*(1 - pow(e, kof));
-			cout << "x: " << x << "\t";
-			Polet << x << ";";
-			y = (m / k)*(((v0y + m * g / k)*((1 - pow(e, kof)))) - g * t1);
-			cout << "y: " << y << endl;
-			Polet << y << endl;
-		}
+
+		k1 = pow((Vi + dt * (m * g - k2 * Vi * Vi) / m), 2);
+
+		V = Vi + dt / 2 * ((m*g - k2 * Vi * Vi) / m + (m * g - k2 * k1) / m);
+		Vi = V;
+
+		cout << fixed << setprecision(3) << "t: " << T << "\t" << "V: " << V << endl;
+		Polet << fixed << setprecision(3) << T << ";" << V << endl;
+
 	}
 
-	printf("\n");
 	Polet.close();
+	system("pause");
 	return 0;
 }
+
+

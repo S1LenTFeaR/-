@@ -1,37 +1,51 @@
-﻿
-#include "pch.h"
+﻿#include "pch.h"
 #include <clocale>
 #include <cstdlib>
 #include <cstring>
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <cmath>
-#define m 60 //Масса Ростика
-#define R 2 //Радиус парашюта
-#define dt 0.05 
-#define c 1.33
-#define p 0.5
-#define h1 0.5
-#define z 0.5
+#define m 80	//Масса парашютиста [кг]
+#define dt 0.05 //Шаг [с]
+#define c 1.22	//Коэффициент лобового сопротивления 
+#define p 1.29	//Плотность среды [кг/м^3]
+#define h1 1.8	//Рост [м]
+#define z 0.45	//Полуобхват грудной клетки [м]
+#define t 15	//Суммарное время полёта [с]
 
 using namespace std;
 
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	float k2, g = 9.8, V, yi, h, t, Vi = 0, ti, T, S;
-	S = h1 * z;
+	float g = 9.8;
+	float V = 0, T = 0, Vi = 0, S, k2, k1;
+	
+	ofstream Polet("Polet.txt");
 
+	S = h1 * z; 
 	k2 = 0.5 * c * S * p;
-	//t = V * m / (k2 * V * V - m * g);
-	for (T = 0; T <= (t = 60); T += dt) // вывод координат
-	{
-		//T = t - ti;
-		V = Vi + T / 2 * ((m*g - k2 * Vi * Vi) / m + (m * g - k2 * (Vi + T * (m * g - k2 * Vi * Vi) / m)*(Vi + T * (m * g - k2 * Vi * Vi) / m)) / m);
-		Vi = V;
-		cout << V << endl;
-	}
 
+	cout << fixed << setprecision(3) << "t: " << T << "\t" << "V: " << V << endl;
+	Polet << fixed << setprecision(3) << T << ";" << V << endl;
+
+	for (T = 0; T <= t; T += dt)
+	{
+
+		k1 = pow((Vi + dt * (m * g - k2 * Vi * Vi) / m), 2);
+
+		V = Vi + dt / 2 * ((m*g - k2 * Vi * Vi) / m + (m * g - k2 * k1) / m);
+		Vi = V;
+		
+		cout << fixed << setprecision(3) << "t: " << T << "\t" << "V: " << V << endl;
+		Polet << fixed << setprecision(3) << T << ";" << V << endl;
+
+	}
+	
+	Polet.close();
+	system("pause");
 	return 0;
 }
+

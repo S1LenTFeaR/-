@@ -2,96 +2,57 @@
 #include <clocale>
 #include <cstdlib>
 #include <cstring>
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <cmath>
-#define dt 0.005
-
-struct tmp
-{
-	float Vx, Vy, Vsq;
-	float X, Y;
-}tmp;
-
+#define dt 0.2	//Шаг времени [с]
+#define r 0.2	//Радиус шарика [м]
+#define km 0.53	//Коэффициент динамической вязкости среды [Н∙с/м2]
+#define p 4500	//Плотность титана [кг/м^3]
+#define P 900	//Плотность бензина [кг/м^3]
+#define t 1000	//Суммарное время полёта [с]
 using namespace std;
 
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	float a, X = 0, Y = 0, V, v0x, v0y, t, m, t1, b, k, Vx, Vy;
-	float g = 9.80665, pi = 3.14159;
-	ofstream Polet("Polet.txt");
-
-	/* a - угол к горизонту в начале выстрела
-		x,y - координаты
-		V - начальная скорость
-		t,t1 - общее время движения, текущее время
-		b - угол к горизонту в радианах
-		g - ускорение свободного падения
-		pi - число пи
+	float g = 9.807, pi = 3.142;
+	float V, T, k1, m, h, Ft, Vi = 0, hi = 0;
+	/*
+		V - скорость тела [м/с]
+		T - время, которое шар находится в полёте [с]
+		m - масса тела [кг]
+		h - расстояние, которое пролетел шар [м]
+		Ft - сила тяжести [Н]
+		Vi и hi - скорость и расстояние на предыдущем шаге
 	*/
+	ofstream PoletV("PoletV.txt");
+	ofstream Poleth("Poleth.txt");
 
-	cout << "Введите коэффициент сопротивления ветра k: ";
-	cin >> k;
-	cout << "Введите массу тела m, кг: ";
-	cin >> m;
-	cout << "Угол броска a, град: ";
-	cin >> a;
-	cout << "Введите начальную скорость тела V0: ";
-	cin >> V;
-	cout << endl;
+	k1 = 6 * pi * km * r;
+	m = 4 * pi * p * pow(r, 3)/3;
+	Ft = (4 * pi * pow(r, 3) * (p - P)) / 3 * g;
 
-	b = pi * a / 180;  // угол в радианах
-	t = (2 * V*sin(b)) / g; // общее время движения
+	cout << "k1: " << k1 << "\tm: " << m << endl;
 
-	v0x = V * cos(b);
-	v0y = V * sin(b);
-
-
-
-	tmp.Vx = v0x;
-	tmp.Vy = v0y;
-	tmp.X = 0;
-	tmp.Y = 0;
-
-
-	cout << "x: " << X << "\t\t" << "y: " << Y << endl;
-	Polet << X << ";" << Y << endl;
-
-	for (t1 = 0; t1 <= t; t1 += dt) // вывод координат
+	for (T = 0; T <= t; T += dt) 
 	{
-		if (Y < 0)
-			t1 += t;
-		else
-		{
-			tmp.Vsq = sqrt((tmp.Vx * tmp.Vx) + (tmp.Vy * tmp.Vy));
-			Vx = tmp.Vx - ((k / m) * tmp.Vsq * tmp.Vx * dt); 
-			Vy = tmp.Vy - g * dt - ((k / m) * tmp.Vsq * tmp.Vy * dt);
-
-			X = tmp.X + tmp.Vx * dt;
-			Y = tmp.Y + tmp.Vy * dt;
-
-			if (Y < 0)
-			{
-				cout << "x: " << X << "\t" << "y: " << "0" << endl;
-				Polet << X << ";" << "0" << endl;
-			}
-			else
-			{
-				cout << "x: " << X << "\t" << "y: " << Y << endl;
-				Polet << X << ";" << Y << endl;
-
-				tmp.Vx = Vx;
-				tmp.Vy = Vy;
-				tmp.X = X;
-				tmp.Y = Y;
-			}
-
-		}
+		V = Vi + dt / 2 * ((Ft - k1 * Vi) / m + (Ft - k1 * (Vi + dt * (Ft - k1 * Vi) / m) ) / m);
+		h = hi + V * dt;
+		
+		Vi = V;
+		hi = h;
+		
+		cout << fixed << setprecision(3) << "t: " << T << "\t" << "V: " << V << "\t" << "h: " << h << endl;
+		PoletV << fixed << setprecision(3)<< T << ";" << V << endl;
+		Poleth << fixed << setprecision(3)<< T << ";" << h << endl;
 	}
 
-	printf("\n");
-	Polet.close();
+	PoletV.close();
+	Poleth.close();
+	
+	system("pause");
 	return 0;
 }
