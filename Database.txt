@@ -3,6 +3,7 @@ USE ProductShop;
 SHOW TABLES;
 DROP TABLE Склад;
 DESC TABLE Склад;
+SELECT * FROM tableName;
 
 
 CREATE TABLE Продукция ( 
@@ -111,7 +112,79 @@ INSERT INTO Чек VALUES(NULL,2,'2019-10-29',85.00,3);	//Чизбургер, л
  SET eMail = 'debis@gmail.com'
  WHERE ID_продавца = 2;
  
+ INSERT INTO Продукция VALUES('Молоко',3,40.00);
+ INSERT INTO Продукция VALUES('Рис',2,30.00);
+ INSERT INTO Продукция VALUES('Банан',10,8.00);
  
-
+ INSERT INTO Товар(Название_продукции) VALUES('Молоко');
+ INSERT INTO Товар(Название_продукции) VALUES('Молоко');
+ INSERT INTO Товар(Название_продукции) VALUES('Молоко');
+ 
+ INSERT INTO Товар(Название_продукции) VALUES('Рис');
+ INSERT INTO Товар(Название_продукции) VALUES('Рис');
+ 
+ INSERT INTO Товар(Название_продукции) VALUES('Банан');
+ INSERT INTO Товар(Название_продукции) VALUES('Банан');
+ INSERT INTO Товар(Название_продукции) VALUES('Банан');
+ INSERT INTO Товар(Название_продукции) VALUES('Банан');
+ INSERT INTO Товар(Название_продукции) VALUES('Банан');
+ INSERT INTO Товар(Название_продукции) VALUES('Банан');
+ INSERT INTO Товар(Название_продукции) VALUES('Банан');
+ INSERT INTO Товар(Название_продукции) VALUES('Банан');
+ INSERT INTO Товар(Название_продукции) VALUES('Банан');
+ INSERT INTO Товар(Название_продукции) VALUES('Банан'); 
+ 
+ INSERT INTO Чек VALUES(NULL,2,NOW(),48.00,2);			//Молоко, Банан
+ INSERT INTO Чек VALUES(NULL,5,'2019-11-07',80.00,3);	//Хлеб, Рис, Банан(3)
+ INSERT INTO Чек VALUES(NULL,3,NOW(),92.00,1);			//Лимонад, Хлеб, Рис
+ INSERT INTO Чек VALUES(NULL,4,'2019-11-06',32.00,3);	//Банан(4)
+ 
+ UPDATE товар
+ SET Номер_чека = 5
+ WHERE ID_продукта = 17;
+ UPDATE товар
+ SET Номер_чека = 5
+ WHERE ID_продукта = 22;
+ 
+ UPDATE товар
+ SET Номер_чека = 6
+ WHERE ID_продукта = 2;
+ UPDATE товар
+ SET Номер_чека = 6
+ WHERE ID_продукта = 20;
+ UPDATE товар
+ SET Номер_чека = 6
+ WHERE ID_продукта = 23;
+ UPDATE товар
+ SET Номер_чека = 6
+ WHERE ID_продукта = 24;
+ UPDATE товар
+ SET Номер_чека = 6
+ WHERE ID_продукта = 25;
+ 
+ UPDATE товар
+ SET Номер_чека = 7
+ WHERE ID_продукта = 8;
+ UPDATE товар
+ SET Номер_чека = 7
+ WHERE ID_продукта = 3;
+ UPDATE товар
+ SET Номер_чека = 7
+ WHERE ID_продукта = 21;
+ 
+ UPDATE товар
+ SET Номер_чека = 8
+ WHERE ID_продукта = 26;
+ UPDATE товар
+ SET Номер_чека = 8
+ WHERE ID_продукта = 27;
+ UPDATE товар
+ SET Номер_чека = 8
+ WHERE ID_продукта = 28;
+ UPDATE товар
+ SET Номер_чека = 8
+ WHERE ID_продукта = 29;
+ 
+ 
 
  
