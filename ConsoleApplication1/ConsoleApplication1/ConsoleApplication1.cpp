@@ -1,51 +1,104 @@
-﻿#include "pch.h"
-#include <clocale>
-#include <cstdlib>
-#include <cstring>
-#include <iomanip>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <cmath>
-#define m 80	//Масса парашютиста [кг]
-#define dt 0.05 //Шаг [с]
-#define c 1.22	//Коэффициент лобового сопротивления 
-#define p 1.29	//Плотность среды [кг/м^3]
-#define h1 1.8	//Рост [м]
-#define z 0.45	//Полуобхват грудной клетки [м]
-#define t 15	//Суммарное время полёта [с]
+﻿#include "stdafx.h"
+#include "pch.h"
+#include "Documents.h"
+#include <locale> // поддержка русского алфавита
+#include <iostream> // потоковый ввод/вывод с консоли
+#include <fstream> // файловые потоки
+#include <string> // текстовые строки С++
+#include <iomanip> // Библиотека для использования манипуляторов ввода-вывода.
+#include <Windows.h> // решение проблем кодировки текста
 
 using namespace std;
+
+
 
 int main()
 {
 	setlocale(LC_ALL, "rus");
-	float g = 9.8;
-	float V = 0, T = 0, Vi = 0, S, k2, k1;
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
 	
-	ofstream Polet("Polet.txt");
+	int N, K1, K2;
+	document *arr;
 
-	S = h1 * z; 
-	k2 = 0.5 * c * S * p;
+	
 
-	cout << fixed << setprecision(3) << "t: " << T << "\t" << "V: " << V << endl;
-	Polet << fixed << setprecision(3) << T << ";" << V << endl;
+	int i;
 
-	for (T = 0; T <= t; T += dt)
+	ifstream file;
+	file.open("Documents.txt");
+
+	cout << "Нажмите '1', если хотите вывести всех участников, из текстового файла." << endl;
+	cout << "Нажмите '2', если хотите ввести участников с клавиатуры." << endl;
+	cin >> K1;
+	if (K1 == 1)
 	{
-
-		k1 = pow((Vi + dt * (m * g - k2 * Vi * Vi) / m), 2);
-
-		V = Vi + dt / 2 * ((m*g - k2 * Vi * Vi) / m + (m * g - k2 * k1) / m);
-		Vi = V;
-		
-		cout << fixed << setprecision(3) << "t: " << T << "\t" << "V: " << V << endl;
-		Polet << fixed << setprecision(3) << T << ";" << V << endl;
+		file >> N; //Считываем количество участников
 
 	}
-	
-	Polet.close();
-	system("pause");
+	else if (K1 == 2)
+	{
+		cout << "Введите количество участнков." << endl;
+		cin >> N;
+	}
+	else
+	{
+		return 0;
+	}
+
+	arr = new document[N]; //Динамическое выделение памяти под массив размером N
+
+
+	if (K1 == 1)
+	{
+		for (i = 0; i < N; i++) // в цикле считываем из файла
+			arr[i].ReadDocuments(file);
+
+		Head();
+
+
+
+		for (i = 0; i < N; i++) // в цикле выводим на экран
+		{
+			cout << "|" << left << setw(2) << i + 1;
+			arr[i].PrintDocuments();
+		}
+
+	}
+	else if (K1 == 2) //В цикле считываем из программы
+	{
+		for (i = 0; i < N; i++) 
+			arr[i].ReadDocuments();
+
+		Head();
+
+		for (i = 0; i < N; i++) // в цикле выводим на экран
+		{
+			cout << "|" << left << setw(2) << i + 1;
+			arr[i].PrintDocuments();
+		}
+	}
+	else
+	{
+		return 0;
+	}
+
+
+	cout << "Нажмите '1', если хотите вывести всех участников, площадь квартиры которых больше 50." << endl;
+	cout << "Нажмите '2', если хотите вывести всех участников, суммарная оплата жилья которых превышает 3000 и в их квартирах нет зарегестрированных жильцов." << endl;
+
+	cin >> K2;
+	if (K2 == 1)
+	{
+		First(N, arr);
+	}
+	else if (K2 == 2)
+	{
+		Second(N, arr);
+	}
+
+		file.close();
+
+	delete[] arr;
 	return 0;
 }
-

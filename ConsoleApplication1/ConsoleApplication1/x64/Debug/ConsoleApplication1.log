@@ -1,8 +1,4 @@
 ﻿  ConsoleApplication1.cpp
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication1\consoleapplication1.cpp(23): warning C4305: инициализация: усечение из "double" в "float"
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication1\consoleapplication1.cpp(28): warning C4305: =: усечение из "double" в "float"
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication1\consoleapplication1.cpp(29): warning C4244: =: преобразование "double" в "float", возможна потеря данных
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication1\consoleapplication1.cpp(34): warning C4305: +=: усечение из "double" в "float"
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication1\consoleapplication1.cpp(37): warning C4244: =: преобразование "double" в "float", возможна потеря данных
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication1\consoleapplication1.cpp(39): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+  Documents.cpp
+  Создание кода...
   ConsoleApplication1.vcxproj -> C:\Users\kille\Desktop\-\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe
