@@ -61,55 +61,66 @@ void document::PrintDocuments()
 {
 	cout << "|" << left << setw(11) << name;
 	cout << "|" << left << setw(11) << account;
-	cout << "|" << left << setw(11) << address;
-	cout << "|" << left << setw(11) << count;
-	cout << "|" << left << setw(11) << total_area;
-	cout << "|" << left << setw(11) << living_area;
-	cout << "|" << left << setw(11) << total_price << "|" << endl;
-	cout << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
+	cout << "|" << left << setw(17) << address;
+	cout << "|" << left << setw(4) << count;
+	cout << "|" << left << setw(7) << total_area;
+	cout << "|" << left << setw(7) << living_area;
+	cout << "|" << left << setw(6) << total_price << "|" << endl;
+	cout << "+--+-----------+---------------+-------------+----+-------+-------+------+" << endl;
 }
 
 
 void Head()
 {
-	cout << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
+	cout << "+--+-----------+---------------+-------------+----+-------+-------+------+" << endl;
 	cout << left << setw(3) << "|№";
 	cout << left << setw(12) << "|Имя";
 	cout << left << setw(12) << "|Л.Счет";
-	cout << left << setw(12) << "|Адрес";
-	cout << left << setw(12) << "|Проживающих";
-	cout << left << setw(12) << "|S общая";
-	cout << left << setw(12) << "|S жилая";
-	cout << left << setw(12) << "|Оплата" << "|" << endl;
-	cout << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
+	cout << left << setw(18) << "|Адрес";
+	cout << left << setw(5) << "|Уч-в";
+	cout << left << setw(8) << "|S общая";
+	cout << left << setw(8) << "|S жилая";
+	cout << left << setw(7) << "|Оплата" << "|" << endl;
+	cout << "+--+-----------+---------------+-------------+----+-------+-------+------+" << endl;
 }
 
-void First(int N, document *arr) //Первое задание
+void First(int k, document *arr) //Первое задание
 {
-	int k;
+	int i;
 	Head();
-	for (k = 0; k < N; k++)
+	for (i = 0; i < k; i++)
 	{
-		if (arr[k].get_total_area() > 50 || arr[k].get_living_area() > 50)
+		if (arr[i].get_total_area() > 50 || arr[i].get_living_area() > 50)
 		{
 
-			cout << "|" << left << setw(2) << k + 1;
-			arr[k].PrintDocuments();
+			cout << "|" << left << setw(2) << i + 1;
+			arr[i].PrintDocuments();
 		}
 	}
 }
 
-void Second(int N, document *arr) //Второе задание
+void Second(int k, document *arr) //Второе задание
 {
-	int k;
+	int i;
 	Head();
-	for (k = 0; k < N; k++)
+	for (i = 0; i < k; i++)
 	{
-		if (arr[k].get_total_price() > 3000 && arr[k].get_count() == 0)
+		if (arr[i].get_total_price() > 3000 && arr[i].get_count() == 0)
 		{
 
-			cout << "|" << left << setw(2) << k + 1;
-			arr[k].PrintDocuments();
+			cout << "|" << left << setw(2) << i + 1;
+			arr[i].PrintDocuments();
 		}
 	}
+}
+
+void document::infile(ofstream & file, int k)
+{
+	file << name << endl;
+	file << account << endl;
+	file << address << endl;
+	file << count << endl;
+	file << total_area << endl;
+	file << living_area << endl;
+	file << total_price << endl;
 }

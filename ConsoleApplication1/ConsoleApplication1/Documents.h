@@ -5,7 +5,7 @@
 
 using std::string;
 using std::ifstream;
-
+using std::ofstream;
 class document
 {
 	private:
@@ -14,9 +14,10 @@ class document
 		string name;									//Плательщик (name), ;
 		string address;									//Адрес(address)
 	public:
-		void ReadDocuments(ifstream & file);
-		void ReadDocuments();
-		void PrintDocuments();
+		void ReadDocuments(ifstream & file);			//Функция чтения из файлы
+		void ReadDocuments();							//Функция чтения из программы
+		void PrintDocuments();							//Функция вывода на экран
+		void infile(ofstream & file, int k);			//Функция записи в файл
 		double get_total_price();
 		int get_count();
 		double get_total_area();
