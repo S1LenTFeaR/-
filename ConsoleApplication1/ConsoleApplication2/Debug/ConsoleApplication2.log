@@ -1,7 +1,2 @@
 ﻿  ConsoleApplication2.cpp
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication2\consoleapplication2.cpp(23): warning C4305: инициализация: усечение из "double" в "float"
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication2\consoleapplication2.cpp(29): warning C4244: =: преобразование "double" в "float", возможна потеря данных
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication2\consoleapplication2.cpp(34): warning C4305: +=: усечение из "double" в "float"
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication2\consoleapplication2.cpp(37): warning C4244: =: преобразование "double" в "float", возможна потеря данных
-c:\users\kille\desktop\-\consoleapplication1\consoleapplication2\consoleapplication2.cpp(39): warning C4244: =: преобразование "double" в "float", возможна потеря данных
-  ConsoleApplication2.vcxproj -> C:\Users\kille\Desktop\-\ConsoleApplication1\ConsoleApplication2\Debug\ConsoleApplication2.exe
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication2\consoleapplication2.cpp(106): fatal error C1010: непредвиденный конец файла во время поиска предкомпилированного заголовка. Возможно, вы забыли добавить директиву "#include "pch.h"" в источник.

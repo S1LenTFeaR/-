@@ -1,11 +1,15 @@
-#ifndef DOCUMENTS_H
-#define DOCUMENTS_H
+#ifndef DOCUMENT_H
+#define DOCUMENT_H
 #include <string>
-#include <fstream>
+#include <iostream> // Библиотека ввода-вывода.
+#include <fstream> // Библиотека файлового ввода-вывода.
+#include <iomanip> // Библиотека для использования манипуляторов ввода-вывода.
 
 using std::string;
 using std::ifstream;
 using std::ofstream;
+using std::istream;
+
 class document
 {
 	private:
@@ -14,9 +18,10 @@ class document
 		string name;									//Плательщик (name), ;
 		string address;									//Адрес(address)
 	public:
-		void ReadDocuments(ifstream & file);			//Функция чтения из файлы
-		void ReadDocuments();							//Функция чтения из программы
-		void PrintDocuments();							//Функция вывода на экран
+		int ReadInt(istream & stream);					// Функция для чтения int из отдельной строки текстового потока
+		void ReadDocument(ifstream & stream);			//Функция чтения из файлы
+		void ReadDocument();							//Функция чтения из программы
+		void display();							//Функция вывода на экран
 		void infile(ofstream & file, int k);			//Функция записи в файл
 		double get_total_price();
 		int get_count();
@@ -25,8 +30,7 @@ class document
 };
 
 void Head();
-void First(int N, document *arr); //Первое задание
-void Second(int N, document *arr); //Второе задание
+
 
 
 

@@ -3,8 +3,11 @@ USE ProductShop;
 SHOW TABLES;
 DROP TABLE Склад;
 DESC TABLE Склад;
-SELECT * FROM tableName;
 
+SELECT * FROM Продукция;
+SELECT * FROM Товар;
+SELECT * FROM Чек;
+SELECT * FROM Продавец;
 
 CREATE TABLE Продукция ( 
  Название_продукции VARCHAR(10) NOT NULL UNIQUE PRIMARY KEY,
@@ -26,6 +29,8 @@ CREATE TABLE Чек (
  Суммарная_стоимость DECIMAL(5,2) UNSIGNED NOT NULL,
  ID_продавца INT UNSIGNED NOT NULL REFERENCES Продавец(ID_продавца)
 );
+
+
 
 CREATE TABLE Товар ( 
  Название_продукции VARCHAR(10) NOT NULL REFERENCES Продукция(Название_продукции),
@@ -247,6 +252,52 @@ INSERT INTO Чек VALUES(NULL,2,'2019-10-29',85.00,3);	//Чизбургер, л
  (SELECT Товар.Название_продукции
  FROM Товар
  WHERE Товар.Номер_чека >2); 
+ 
+ 
+ SELECT * 
+ FROM продукция 
+ INNER JOIN товар ON продукция.Название_продукции = товар.Название_продукции;
+ 
+ SELECT чек.Номер_чека, чек.Дата_совершения, товар.Название_продукции, товар.ID_продукта
+ FROM чек 
+ INNER JOIN товар ON чек.Номер_чека = товар.Номер_чека;
+ 
+ ALTER TABLE чек MODIFY
+ Количество_товаров INT UNSIGNED;
+ ALTER TABLE чек MODIFY
+ Дата_совершения DATE;
+ ALTER TABLE чек MODIFY
+ Суммарная_стоимость DECIMAL(5,2) UNSIGNED;
+ ALTER TABLE чек MODIFY
+ ID_продавца INT UNSIGNED;
+ 
+ INSERT INTO Чек(Номер_чека) VALUES(NULL);
+ 
+ SELECT Товар.Название_продукции, Товар.Номер_чека, Чек.Номер_чека, Чек.Суммарная_стоимость
+ FROM Товар
+ LEFT OUTER JOIN Чек ON Товар.Номер_чека = Чек.Номер_чека;
+
+ SELECT Товар.Название_продукции, Товар.Номер_чека, Чек.Номер_чека, Чек.Суммарная_стоимость
+ FROM Товар
+ RIGHT OUTER JOIN Чек ON Товар.Номер_чека = Чек.Номер_чека;
+ 
+ SELECT Товар.Название_продукции, Товар.Номер_чека, Чек.Номер_чека, Чек.Суммарная_стоимость
+ FROM Товар
+ LEFT OUTER JOIN Чек ON Товар.Номер_чека = Чек.Номер_чека
+ UNION
+ SELECT Товар.Название_продукции, Товар.Номер_чека, Чек.Номер_чека, Чек.Суммарная_стоимость
+ FROM Товар
+ RIGHT OUTER JOIN Чек ON Товар.Номер_чека = Чек.Номер_чека; 
+ 
+ SELECT * 
+ FROM Товар
+ CROSS JOIN Чек;
+
+
+ 
+ 
+ 
+ 
  
  
  

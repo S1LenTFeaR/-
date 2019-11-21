@@ -1,5 +1,6 @@
 ﻿#include "stdafx.h"
 #include "pch.h"
+#include "Documents.h"
 #include <locale> // поддержка русского алфавита
 #include <iostream> // потоковый ввод/вывод с консоли
 #include <fstream> // файловые потоки
@@ -9,132 +10,6 @@
 
 using namespace std;
 
-struct document
-{
-	int account, count;								//Номер личного счета (account), Количество проживающих (count);
-	double total_area, living_area, total_price;	//Общая площадь, кв.м. (total_area), Жилая площадь, кв.м. (living_area), Общая сумма оплаты, руб (total_price);
-	string name;									//Плательщик (name), ;
-	string address;									//Адрес(address)
-};
-
-void Head()
-{
-
-	cout << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
-	cout << left << setw(3) << "|№";
-	cout << left << setw(12) << "|Имя";
-	cout << left << setw(12) << "|Л.Счет";
-	cout << left << setw(12) << "|Адрес";
-	cout << left << setw(12) << "|Проживающих";
-	cout << left << setw(12) << "|S общая";
-	cout << left << setw(12) << "|S жилая";
-	cout << left << setw(12) << "|Оплата" << "|" << endl;
-	cout << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
-
-}
-
-document ReadDocuments(ifstream & file)
-{
-	document Document;
-	file >> Document.name;
-	file >> Document.account;
-	file >> Document.address;
-	file >> Document.count;
-	file >> Document.total_area;
-	file >> Document.living_area;
-	file >> Document.total_price;
-	return Document;
-}
-
-void PrintDocuments(document Document)
-{
-	cout << "|" << left << setw(11) << Document.name;
-	cout << "|" << left << setw(11) << Document.account;
-	cout << "|" << left << setw(11) << Document.address;
-	cout << "|" << left << setw(11) << Document.count;
-	cout << "|" << left << setw(11) << Document.total_area;
-	cout << "|" << left << setw(11) << Document.living_area;
-	cout << "|" << left << setw(11) << Document.total_price << "|" << endl;
-	cout << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
-}
-
-void First(int N, document *arr) //Первое задание
-{
-	int k;
-	ofstream first("First.txt");
-	Head();
-
-	first << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
-	first << left << setw(3) << "|№";
-	first << left << setw(12) << "|Имя";
-	first << left << setw(12) << "|Л.Счет";
-	first << left << setw(12) << "|Адрес";
-	first << left << setw(12) << "|Проживающих";
-	first << left << setw(12) << "|S общая";
-	first << left << setw(12) << "|S жилая";
-	first << left << setw(12) << "|Оплата" << "|" << endl;
-	first << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
-	for (k = 0; k < N; k++)
-	{
-		if (arr[k].total_area > 50 || arr[k].living_area > 50)
-		{
-
-			cout << "|" << left << setw(2) << k + 1;
-			PrintDocuments(arr[k]);
-
-			first << "|" << left << setw(2) << k + 1;
-			first << "|" << left << setw(11) << arr[k].name;
-			first << "|" << left << setw(11) << arr[k].account;
-			first << "|" << left << setw(11) << arr[k].address;
-			first << "|" << left << setw(11) << arr[k].count;
-			first << "|" << left << setw(11) << arr[k].total_area;
-			first << "|" << left << setw(11) << arr[k].living_area;
-			first << "|" << left << setw(11) << arr[k].total_price << "|" << endl;
-			first << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
-		}
-	}
-	first.close();
-	cout << "\nЗадание - 1 успешно выполнено в файле First" << endl;
-}
-
-void Second(int N, document *arr) //Второе задание
-{
-	int k;
-	ofstream second("Second.txt");
-	Head();
-	second << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
-	second << left << setw(3) << "|№";
-	second << left << setw(12) << "|Имя";
-	second << left << setw(12) << "|Л.Счет";
-	second << left << setw(12) << "|Адрес";
-	second << left << setw(12) << "|Проживающих";
-	second << left << setw(12) << "|S общая";
-	second << left << setw(12) << "|S жилая";
-	second << left << setw(12) << "|Оплата" << "|" << endl;
-	second << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
-	for (k = 0; k < N; k++)
-	{
-		if (arr[k].total_price > 3000 && arr[k].count == 0)
-		{
-
-			cout << "|" << left << setw(2) << k + 1;
-			PrintDocuments(arr[k]);
-
-			second << "|" << left << setw(2) << k + 1;
-			second << "|" << left << setw(11) << arr[k].name;
-			second << "|" << left << setw(11) << arr[k].account;
-			second << "|" << left << setw(11) << arr[k].address;
-			second << "|" << left << setw(11) << arr[k].count;
-			second << "|" << left << setw(11) << arr[k].total_area;
-			second << "|" << left << setw(11) << arr[k].living_area;
-			second << "|" << left << setw(11) << arr[k].total_price << "|" << endl;
-			second << "+--+-----------+-----------+-----------+-----------+-----------+-----------+-----------+" << endl;
-		}
-	}
-	second.close();
-	cout << "\nЗадание - 2 успешно выполнено в файле Second" << endl;
-}
-
 
 
 int main()
@@ -143,45 +18,104 @@ int main()
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 
-	int N, K;
+	int Count_File = 0, K1, Count_Keyboard = 0, Max_Num_Documents;
 	document *arr;
 
-	ifstream file;
-	file.open("Documents.txt");
-
-	int i;
-	file >> N; //Считываем количество участников
-	arr = new document[N]; //Динамическое выделение памяти под массив размером N
 
 
-	for (i = 0; i < N; i++) // в цикле считываем из файла
-		arr[i] = ReadDocuments(file);
+int i;
+
+ifstream file;
+file.open("Documents.txt");
+
+cout << "Нажмите '1', если хотите вывести всех участников, из текстового файла." << endl;
+cout << "Нажмите '2', если хотите ввести участников с клавиатуры." << endl;
+cin >> K1;
+if (K1 == 1) //Случай вывода текстового файла
+{
+	file >> Count_File; //Считываем количество участников
+
+}
+else if (K1 == 2) //Случай добавления в текстовый файл и вывода всех участников
+{
+	file >> Count_File;
+	cout << "Введите количество участнков." << endl;
+	cin >> Count_Keyboard;
+}
+else //Выход из программы
+{
+	return 0;
+}
+
+Max_Num_Documents = Count_File + Count_Keyboard; //Высчитывание количества участников
+
+arr = new document[Max_Num_Documents]; //Динамическое выделение памяти под массив размером k
+
+
+if (K1 == 1) //Случай вывода текстового файла
+{
+	for (i = 0; i < Max_Num_Documents; i++) // в цикле считываем из файла
+		arr[i].ReadDocuments(file);
 
 	Head();
 
 
 
-	for (i = 0; i < N; i++) // в цикле выводим на экран
+	for (i = 0; i < Count_File; i++) //В цикле выводим на экран
 	{
 		cout << "|" << left << setw(2) << i + 1;
-		PrintDocuments(arr[i]);
+		arr[i].PrintDocuments();
 	}
 
+}
+else if (K1 == 2) //Случай добавления в текстовый файл и вывода всех участников
+{
+	for (i = 0; i < Count_File; i++) //В цикле считываем из файла
+		arr[i].ReadDocuments(file);
 
-	cout << "Нажмите '1', если хотите вывести всех участников, площадь квартиры которых больше 50." << endl;
-	cout << "Нажмите '2', если хотите вывести всех участников, суммарная оплата жилья которых превышает 3000 и в их квартирах нет зарегестрированных жильцов." << endl;
-	cin >> K;
-	if (K == 1)
+	for (i; i < Max_Num_Documents; i++)	//В цикле считываем из программы
+		arr[i].ReadDocuments();
+
+	ofstream file("Documents.txt");	//Перезаписываем измененный файл
+	file << Max_Num_Documents << endl;
+	for (i = 0; i < Max_Num_Documents; i++)
 	{
-		First(N, arr);
+		arr[i].infile(file, Max_Num_Documents);
 	}
-	else if (K == 2)
+
+
+	Head();
+
+	for (i = 0; i < Max_Num_Documents; i++) //В цикле выводим на экран
 	{
-		Second(N, arr);
+		cout << "|" << left << setw(2) << i + 1;
+		arr[i].PrintDocuments();
 	}
-
-	file.close();
-
-	delete[] arr;
+}
+else
+{
 	return 0;
 }
+
+
+cout << "Нажмите '1', если хотите вывести всех участников, площадь квартиры которых больше 50." << endl;
+cout << "Нажмите '2', если хотите вывести всех участников, суммарная оплата жилья которых превышает 3000 и в их квартирах нет зарегестрированных жильцов." << endl;
+
+cin >> K1;
+if (K1 == 1)
+{
+	First(Max_Num_Documents, arr); //Выполняем задание 1
+}
+else if (K1 == 2) //Выполняем задание 2
+{
+	Second(Max_Num_Documents, arr);
+}
+
+file.close();
+
+delete[] arr;
+return 0;
+}
+
+
+
