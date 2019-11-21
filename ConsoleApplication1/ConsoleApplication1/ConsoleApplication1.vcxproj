@@ -164,6 +164,9 @@
     </ClCompile>
     <ClCompile Include="Documents.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Documents.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -39,6 +39,7 @@ void document::ReadDocuments(ifstream & file)
 	file >> total_price;
 }
 
+
 void document::ReadDocuments()
 {
 	cout << "Введите имя: ";
@@ -66,13 +67,13 @@ void document::PrintDocuments()
 	cout << "|" << left << setw(7) << total_area;
 	cout << "|" << left << setw(7) << living_area;
 	cout << "|" << left << setw(6) << total_price << "|" << endl;
-	cout << "+--+-----------+---------------+-------------+----+-------+-------+------+" << endl;
+	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+" << endl;
 }
 
 
 void Head()
 {
-	cout << "+--+-----------+---------------+-------------+----+-------+-------+------+" << endl;
+	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+" << endl;
 	cout << left << setw(3) << "|№";
 	cout << left << setw(12) << "|Имя";
 	cout << left << setw(12) << "|Л.Счет";
@@ -81,7 +82,7 @@ void Head()
 	cout << left << setw(8) << "|S общая";
 	cout << left << setw(8) << "|S жилая";
 	cout << left << setw(7) << "|Оплата" << "|" << endl;
-	cout << "+--+-----------+---------------+-------------+----+-------+-------+------+" << endl;
+	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+" << endl;
 }
 
 void First(int k, document *arr) //Первое задание
