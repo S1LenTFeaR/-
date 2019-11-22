@@ -1,0 +1,17 @@
+﻿  ConsoleApplication3.cpp
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication3\consoleapplication3\consoleapplication3.cpp(37): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication3\consoleapplication3\consoleapplication3.cpp(40): warning C4244: аргумент: преобразование "double" в "GLfloat", возможна потеря данных
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication3\consoleapplication3\consoleapplication3.cpp(43): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication3\consoleapplication3\consoleapplication3.cpp(46): warning C4244: аргумент: преобразование "double" в "GLfloat", возможна потеря данных
+c:\users\kille\desktop\-\consoleapplication1\consoleapplication3\consoleapplication3\consoleapplication3.cpp(77): warning C4244: инициализация: преобразование "double" в "float", возможна потеря данных
+ConsoleApplication3.obj : error LNK2019: ссылка на неразрешенный внешний символ __imp__glutInitWindowPosition@8 в функции _main
+ConsoleApplication3.obj : error LNK2019: ссылка на неразрешенный внешний символ __imp__glutInitWindowSize@8 в функции _main
+ConsoleApplication3.obj : error LNK2019: ссылка на неразрешенный внешний символ __imp__glutInitDisplayMode@4 в функции _main
+ConsoleApplication3.obj : error LNK2019: ссылка на неразрешенный внешний символ __imp__glutMainLoop@0 в функции _main
+ConsoleApplication3.obj : error LNK2019: ссылка на неразрешенный внешний символ __imp__glutSwapBuffers@0 в функции "void __cdecl render_scene(void)" (?render_scene@@YAXXZ)
+ConsoleApplication3.obj : error LNK2019: ссылка на неразрешенный внешний символ __imp__glutReshapeFunc@4 в функции _main
+ConsoleApplication3.obj : error LNK2019: ссылка на неразрешенный внешний символ __imp__glutDisplayFunc@4 в функции _main
+ConsoleApplication3.obj : error LNK2019: ссылка на неразрешенный внешний символ __imp____glutInitWithExit@12 в функции _glutInit_ATEXIT_HACK@8
+ConsoleApplication3.obj : error LNK2019: ссылка на неразрешенный внешний символ __imp____glutCreateWindowWithExit@8 в функции _glutCreateWindow_ATEXIT_HACK@4
+freeglut.lib : warning LNK4272: тип компьютера библиотеки "x64" конфликтует с типом целевого компьютера "x86"
+C:\Users\kille\Desktop\-\ConsoleApplication1\ConsoleApplication3\Debug\ConsoleApplication3.exe : fatal error LNK1120: неразрешенных внешних элементов: 9
