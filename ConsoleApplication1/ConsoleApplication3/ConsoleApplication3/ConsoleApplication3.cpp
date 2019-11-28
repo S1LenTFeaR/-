@@ -66,7 +66,7 @@ void render_scene() {
 			a = (F - m * g - (1 / 2)*c*ro*exp(-b * h)*s*v*v) / m;
 			v = v + a * dt / 7800;
 			h = h + v * dt;
-			glVertex2d(t / tk , v);
+			glVertex2d(t / tk , h);
 			t += dt;
 		}
 		glEnd();

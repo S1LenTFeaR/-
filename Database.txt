@@ -293,7 +293,52 @@ INSERT INTO Чек VALUES(NULL,2,'2019-10-29',85.00,3);	//Чизбургер, л
  FROM Товар
  CROSS JOIN Чек;
 
-
+ 
+ CREATE PROCEDURE z2 ()
+ SELECT Товар.Название_продукции, Товар.Номер_чека, Чек.Номер_чека, Чек.Суммарная_стоимость
+ FROM Товар
+ RIGHT OUTER JOIN Чек ON Товар.Номер_чека = Чек.Номер_чека;
+ 
+ CALL z2;
+ DROP PROCEDURE z2;
+ 
+ CREATE PROCEDURE z3 ()
+ UPDATE Продукция SET Стоимость_продукции=Стоимость_продукции*0.9
+ WHERE Название_продукции = "Лапша";
+ 
+ CALL z3;
+ DROP PROCEDURE z3;
+ 
+ CREATE PROCEDURE z4 (k VARCHAR(20))
+ SELECT *
+ FROM Товар
+ WHERE Название_продукции = k;
+ 
+ CALL z4 ("Банан");
+ DROP PROCEDURE z4;
+ 
+ CREATE PROCEDURE z5 (k VARCHAR(20), p FLOAT)
+ UPDATE Продукция SET Стоимость_продукции=Стоимость_продукции*(1-p)
+ WHERE Название_продукции=k;
+ 
+ SELECT * FROM Продукция;
+ 
+ CALL z5 ("Банан", 0.1);
+ DROP PROCEDURE z5;
+ 
+ CREATE PROCEDURE z6 (m int, OUT s FLOAT) 
+ SELECT s=Sum(Чек.Суммарная_стоимость)  
+ FROM Чек  
+ GROUP BY Month(Чек.Дата_совершения)
+ HAVING Month(Чек.Дата_совершения)=m;
+ 
+ CALL z6 (11);
+ DROP PROCEDURE z6;
+ 
+ 
+ 
+ 
+ 
  
  
  
