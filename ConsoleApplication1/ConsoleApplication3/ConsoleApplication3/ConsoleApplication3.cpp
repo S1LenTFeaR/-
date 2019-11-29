@@ -2,108 +2,168 @@
 #include"glut.h"
 #include<cmath>
 #include<iostream>
-using namespace std;
-double ro = 1.29;
-double g = 9.8;
-double dt = 0.1;
-double c = 0.45;
-double b = 0.00129;
-double F;
-double s = 20;
-double alpha;
-double m0;
-double mk;
-double m, a, v, h, t;
-//Рисуем траекторию тела брошенного под
-//углом к горизонту с учетом сопротивления среды
-void render_scene() {
-	//Очищаем текущим цветом
-	glClear(GL_COLOR_BUFFER_BIT);
-	//Рисуем координатную систему
-	//Задаем цвет рисовки красным
-	glLineWidth(4.0);
-	glColor3d(1.0, 1.0, 1.0);
-	glBegin(GL_LINES);
-	glVertex2d(0.0, 0.0);
-	glVertex2d(1.4, 0.0);
-	glEnd();
-	glBegin(GL_LINES);
-	glVertex2d(0.0, 0.0);
-	glVertex2d(0.0, 1.4);
-	glEnd();
-	glLineWidth(1.0);
-	glColor3f(1.0, 0.0, 0.0);
-	float i;
-	for (i = 0; i <= 1.3; i = i + 0.25) {
-		glBegin(GL_LINES);
-		glVertex2f(1.0, i);
-		glVertex2f(1.0, i + 0.1);
-		glEnd();
-	}
-	for (i = 0; i <= 1.3; i = i + 0.25) {
-		glBegin(GL_LINES);
-		glVertex2f(i, 1.0);
-		glVertex2f(i + 0.1, 1.0);
-			glEnd();
-	}
-	int k;
-	cout << "F = "; cin >> F;
-	cout << "m0: "; cin >> m0;
-	cout << "mk: "; cin >> mk;
-	cout << "alpha: "; cin >> alpha;
-	cout << "k = "; cin >> k;
-	for (i = 0; i <= k; i = i + 1) 
-	{
-		F = F + F * 0.5;
-		v = 0;
-		h = 0;
-		t = dt;
-		double tk = ((m0 - mk) / alpha);
-		glColor3d(i / 10.0, 1.0 - i / 10.0, 1.0);
-		glBegin(GL_POINTS);
-		while ((t <= tk) && (v <= 1.0)) {
-			m = m0 - alpha * t;
-			a = (F - m * g - (1 / 2)*c*ro*exp(-b * h)*s*v*v) / m;
-			v = v + a * dt / 7800;
-			h = h + v * dt;
-			glVertex2d(t / tk , h);
-			t += dt;
-		}
-		glEnd();
-		glutSwapBuffers();
-	}
+//Задаем начальные значение
+//x - Расстояние между спутником и центром притяжения
+float x = 1.2;
+//y - координата спутника, начальное значение y=0
+float y = 0;
+//vx - составляющая скорости по Ох. В начальный момент времени vx= 0
+double vx = 0;
+//vy - составляющая скорости по Оу, В начальный момент времени vy = 1.2
+double vy = 1.2;
+//dt - шаг
+double dt = 0.00005;
+//t - Общее время
+double t = dt;
+//PI - число Пи
+const double PI = 3.1415926535;
+//m,k - Промежуточные переменные
+double m, k;
+double velo(double v, double z, double l, double ta) {
+	m = z * z + l * l;
+	k = sqrt(m);
+	return (v - (z / (k*k*k)*ta));
 }
-void change_size(GLsizei w, GLsizei h) 
-{
+//Вызывается при изменении размеров окна
+void change_size(GLsizei w, GLsizei h) {
+	GLdouble aspect_ratio;
+	//Предотвращается деление на 0
 	if (h == 0)
 		h = 1;
-		float ratio = w * 1.0 / h;
-	glMatrixMode(GL_PROJECTION);
+	//Устанавливается поле просмотра с размерами окна
+	glViewport(0, 0, w, h);
+		//Обновляется система координат
+		glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glViewport(5, 5, w, h);
-	gluOrtho2D(0, 1.5, 0, 1.5);
+	//С помощью плоскостей отсечения (левая, правая, нижняя,
+	//верхняя, ближняя, дальняя) устанавливается объем отсечения
+	aspect_ratio = (GLdouble)w / (GLdouble)h;
+	if (w <= h)
+		glOrtho(-40.0, 6.0, -23.0 / aspect_ratio, 23.0 / aspect_ratio, -1.0, 1.0);
+	else
+		glOrtho(-40.0*aspect_ratio, 6.0*aspect_ratio, -23.0, 23.0, -1.0, 1.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
-void Initialise() 
-{
-	//Цвет очистки черный
+//Задается состояние визуализации
+void initialise() {
+	//Задается цвет очистки окна - черный
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 }
-int main(int argc, char **argv) 
-{
-	//Создание окна
+void render_scene() {
+	//Очищается окно, используя текущий цвет очистки
+	glClear(GL_COLOR_BUFFER_BIT);
+	//В качестве текущего цвета рисования задаем красный
+	//R G B
+	glColor3f(1.0, 0.0, 0.0);
+	//Рисуем координатную систему:
+	//Рисуем ось Ох
+	glBegin(GL_LINES);
+	glVertex2f(-39.0, 0.0);
+		glVertex2f(5.0, 0.0);
+	glEnd();
+	//Рисуем ось Оу
+	glBegin(GL_LINES);
+	glVertex2f(0.0, -22.0);
+	glVertex2f(0.0, 22.0);
+	glEnd();
+	//Рисуем центр притяжения
+	//Радиус центра = 1
+	//Цвет закраски - зеленый
+	glColor3f(0.0, 1.0, 0.0);
+	double radian = 0.0;
+	double xx, yy;
+	glBegin(GL_POINTS);
+	while (radian <= 2 * PI) {
+		xx = cos(radian);
+		yy = sin(radian);
+		glVertex2d(xx, yy);
+		radian += 0.05;
+	}
+	glEnd();
+	//Задаем в качества цвета закраски синий
+	glColor3f(0.0, 0.0, 1.0);
+	//Рисуем траекторию первого спутника
+	glBegin(GL_POINTS);
+	while (t <= 70) {
+		glVertex2d(x, y);
+		vx = velo(vx, x, y, dt);
+		vy = velo(vy, y, x, dt);
+		x += vx * dt;
+			y += vy * dt;
+		t += dt;
+	}
+	glEnd();
+	//Задаем начальные данные
+	x = 1.25;
+	y = 0;
+	vx = 0.0;
+	vy = 1.2;
+	t = 0;
+	//Рисуем траекторию второго спутника
+	glColor3f(0.0, 1.0, 1.0);
+	glBegin(GL_POINTS);
+	while (t <= 200) {
+		glVertex2d(x, y);
+		vx = velo(vx, x, y, dt);
+		vy = velo(vy, y, x, dt);
+		x += vx * dt;
+		y += vy * dt;
+		t += dt;
+	}
+	glEnd();
+	//Рисуем траекторию 3-го спутника
+	x = 1.3;
+	y = 0;
+	vx = 0;
+	vy = 1.2;
+	t = 0;
+	glColor3f(.5, .6, 1.0);
+		glBegin(GL_POINTS);
+	while (t <= 220) {
+		glVertex2d(x, y);
+		vx = velo(vx, x, y, dt);
+		vy = velo(vy, y, x, dt);
+		x += vx * dt;
+		y += vy * dt;
+		t += dt;
+	}
+	//Рисуем траекторию 4-го спутника
+	x = 1.35;
+	y = 0;
+	vx = 0;
+	vy = 1.2;
+	t = 0;
+	glColor3f(.85, .25, .90);
+	glBegin(GL_POINTS);
+	while (t <= 760) {
+		glVertex2d(x, y);
+		vx = velo(vx, x, y, dt);
+		vy = velo(vy, y, x, dt);
+		x += vx * dt;
+		y += vy * dt;
+		t += dt;
+	}
+	glEnd();
+	//Очищаем очередь текущих команд
+	glFlush();
+}
+//Точка входа основной программы
+int main(int argc, char **argv) {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-	glutInitWindowSize(640, 480);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	//Задается размер окна
+	glutInitWindowSize(640, 640);
+	//Определяется позиции окна на рабочем столе
 	glutInitWindowPosition(20, 20);
-	glutCreateWindow("Полет ракеты");
-	//Вызов обратных функций
+	//Создается окно с названием в кавычках
+	glutCreateWindow("Движение небесных тел");
+	//Дисплейная функция
 	glutDisplayFunc(render_scene);
+	//Функция перерисовки
 	glutReshapeFunc(change_size);
-	Initialise();
-	//initMenu();
-	//Запустить оболочку GLUT
+	initialise();
+	//Запускается оболочка GLUT
 	glutMainLoop();
 	return 0;
 }
