@@ -12,8 +12,8 @@ private:
 
 
 public:
-	archive(unsigned int max_nd);		// конструктор класса bookstore  ~bookstore();                   
-	~archive();							// деструктор класса bookstore 
+	archive(unsigned int max_nd);		// конструктор класса archive                  
+	~archive();							// деструктор класса archive 
 	
 	void add_document(ifstream & file);
 	void read_documents(ifstream & file);
