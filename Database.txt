@@ -335,6 +335,55 @@ INSERT INTO Чек VALUES(NULL,2,'2019-10-29',85.00,3);	//Чизбургер, л
  CALL z6 (11);
  DROP PROCEDURE z6;
  
+ CREATE VIEW v1 AS    
+ (SELECT Номер_чека,Дата_совершения, Суммарная_стоимость FROM Чек WHERE Номер_чека<5)    
+ WITH CHECK OPTION;
+ 
+ SELECT * FROM v1;
+ DROP VIEW v1;
+ 
+ CREATE VIEW v2 AS    
+ (SELECT * FROM Продукция WHERE Стоимость_продукции<40)    
+ WITH CHECK OPTION;
+ 
+ SELECT * FROM v2;
+ SELECT * FROM Продукция;
+ 
+ INSERT INTO v2 VALUES('Мандарины',5,30);
+ INSERT INTO v2 VALUES('Мандарины',5,60);
+ DELETE FROM Продукция WHERE Название_продукции='Мандарины';
+ 
+ CREATE VIEW v3 AS    
+ (SELECT * FROM Продукция WHERE Стоимость_продукции<40);
+ 
+ INSERT INTO v3 VALUES('Мандарины',5,30);
+ INSERT INTO v3 VALUES('Мандарины',5,60);
+ DELETE FROM Продукция WHERE Название_продукции='Мандарины';
+ 
+ SELECT * FROM v3;
+ SELECT * FROM Продукция;
+ 
+ CREATE VIEW v3_1 AS    
+ (SELECT * FROM v3 WHERE Стоимость_продукции<80)    
+ WITH LOCAL CHECK OPTION;
+ 
+ INSERT INTO v3_1 VALUES('Мандарины',5,60);
+ 
+ SELECT * FROM v3_1;
+ SELECT * FROM Продукция;
+ 
+ CREATE VIEW v3_2 AS    
+ (SELECT * FROM v3 WHERE Стоимость_продукции<80)    
+ WITH CASCADED CHECK OPTION;
+ 
+ INSERT INTO v3_2 VALUES('Лимоны',9,60);
+ 
+ 
+ 
+ 
+
+
+ 
  
  
  

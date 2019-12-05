@@ -3,7 +3,9 @@
 #include "Documents.h"
 #include <iostream>
 #include <iomanip> // Ѕиблиотека дл€ использовани€ манипул€торов ввода-вывода.
+#include <Windows.h> // решение проблем кодировки текста
 using namespace std;
+
 
 double document::get_total_price()
 {

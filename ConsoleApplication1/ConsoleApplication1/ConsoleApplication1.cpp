@@ -57,7 +57,7 @@ void in_file(archive & my_archive)
 	}
 }
 
-void main()
+int main()
 {
 	setlocale(LC_ALL, "rus");
 	SetConsoleCP(1251);
@@ -95,6 +95,7 @@ void main()
 	while (action != -1);
 	file.close();
 	in_file(my_archive);
+	return 0;
 }
 
 
