@@ -10,9 +10,9 @@ archive::archive(unsigned int max_nd)
 	Max_Num_Documents = max_nd;  
 	documents = new document[Max_Num_Documents];
 	Num_Documents = 0;
-	cout << "\nВызван конструктор класса bookstore:";  
-	cout << "\n    выделено объектов - " << Max_Num_Documents;
-	cout << "\n    загружено документов - " << Num_Documents << endl;
+	cout << "\nВызван конструктор класса archive:";  
+	cout << "\nвыделено объектов - " << Max_Num_Documents;
+	cout << " загружено документов - " << Num_Documents << endl;
 }
 
 //Деструктор
@@ -22,11 +22,11 @@ archive::~archive()
 	delete[] documents;
 	Num_Documents = 0;
 	cout << "\nВызван деструктор класса archive:";  
-	cout << "\n    выделенная память освобождена";
+	cout << "\n выделенная память освобождена";
 }
 
 
-void archive::ReadDocuments(ifstream & file)
+void archive::read_documents(ifstream & file)
 { 
 	if (!file.is_open()) 
 	{ 
@@ -34,49 +34,72 @@ void archive::ReadDocuments(ifstream & file)
 		system("pause");   
 		exit(1); 
 	}
-	int Count_File = 0 ,Count_Keyboard = 0, max_nd = 0;
+	int Count_File;
 	file >> Count_File;
-	max_nd = Count_File + Count_Keyboard;
-	for (int i = 0; i < Count_File; i++)
+	for (int i = Num_Documents; i < Count_File; i++)
 	{
-		documents[i].ReadDocument(file);
+		documents[i].read_document(file);
 	}
+	Num_Documents = Count_File;
 }
 
 void archive::add_document(ifstream & file)
 {
-	int Count_File;
+	int i;
 	int Count_Keyboard;
-	int max_nd;
 	cout << "Введите количество документов, которые хотите добавить: ";
-	file >> Count_File;
 	cin >> Count_Keyboard;
-	max_nd = Count_File + Count_Keyboard;
-	for (int i = Count_File; i < Max_Num_Documents; i++)
+	if (Num_Documents + Count_Keyboard <= Max_Num_Documents)     // можем добавить еще один документ? 
 	{
-		documents[i].ReadDocument();
+		for (i = Num_Documents; i < Num_Documents + Count_Keyboard; i++)
+		{
+			documents[Num_Documents].read_document();
+		}
+	}
+	Num_Documents = Num_Documents + Count_Keyboard;
+}
+
+void archive::display_all()
+{ 
+	Head();
+	for (int i = 0; i < Num_Documents; i++)
+	{ 
+		cout << "|" << left << setw(2) << i+1;
+		documents[i].display(); 
 	}
 }
 
-void archive::display_all(unsigned int max_nd)
-{ 
-	cout << "\n\nПОЛНЫЙ АССОРТИМЕНТ КНИЖНОГО МАГАЗИНА \n";  
-	for (int i = 0; i < Max_Num_Documents; i++)   
-		documents[i].display(); 
-}
-
-int archive::get_nmd()
+void archive::remove() //Удаление документа
 {
-	return Max_Num_Documents;
+	int i, n;
+	cin >> n;
+	for (i = n-1; i < Num_Documents; i++)
+	{
+		documents[i] = documents[i + 1]; //Смещение документов на 1 позицию назад
+	}
+	Num_Documents--;
 }
 
+void archive::in_file()
+{
+	ofstream file;
+	file.open("Documents.txt");
+	file << Num_Documents << endl;
+	for (int i = 0; i < Num_Documents; i++)
+	{
+		documents[i].infile(file);
+	}
+	cout << "\nДанные перезаписаны в файл " << "Documents.txt" << ":";  
+	cout << "\n    число записанных документов - " << "Documents.txt" << endl;
+	file.close();
+}
 
 void archive::First() //Первое задание
 {
 	int i;
 	
 	Head();
-	for (i = 0; i < Max_Num_Documents; i++)
+	for (i = 0; i < Num_Documents; i++)
 	{
 		if (documents[i].get_total_area() > 50 || documents[i].get_living_area() > 50)
 		{
@@ -92,7 +115,7 @@ void archive::Second() //Второе задание
 	int i;
 	
 	Head();
-	for (i = 0; i < Max_Num_Documents; i++)
+	for (i = 0; i < Num_Documents; i++)
 	{
 		if (documents[i].get_total_price() > 3000 && documents[i].get_count() == 0)
 		{
@@ -102,5 +125,7 @@ void archive::Second() //Второе задание
 		}
 	}
 }
+
+
 
 

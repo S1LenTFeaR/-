@@ -25,7 +25,7 @@ double document::get_living_area()
 	return living_area;
 }
 
-void document::ReadDocument(ifstream & file)
+void document::read_document(ifstream & file)
 {
 	file >> name;
 	file >> account;
@@ -36,7 +36,7 @@ void document::ReadDocument(ifstream & file)
 	file >> total_price;
 }
 
-void document::ReadDocument()
+void document::read_document()
 {
 	cout << "¬ведите им€: ";
 	cin >> name;
@@ -66,7 +66,7 @@ void document::display()
 	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+" << endl;
 }
 
-void document::infile(ofstream & file, int k)
+void document::infile(ofstream & file)
 {
 	file << name << endl;
 	file << account << endl;
@@ -75,11 +75,4 @@ void document::infile(ofstream & file, int k)
 	file << total_area << endl;
 	file << living_area << endl;
 	file << total_price << endl;
-}
-
-int document::ReadInt(istream & stream)
-{
-	int value;
-	stream >> value;
-	return value;
 }

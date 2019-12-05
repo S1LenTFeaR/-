@@ -13,18 +13,15 @@ using namespace std;
 int SelectAction()
 {
 	int action;
-	cout << "----- ----- ----- -----" << endl;
-	cout << "Menu:" << endl;
-	cout << setw(2) << 1 << " / " << "Add book." << endl;
-	cout << setw(2) << 2 << " / " << "Show books." << endl;
-	cout << setw(2) << 3 << " / " << "Read books from file." << endl;
-	cout << setw(2) << 4 << " / " << "Write books to default file." << endl;
-	cout << setw(2) << 5 << " / " << "Write books to file." << endl;
-	cout << setw(2) << 6 << " / " << "Remove book." << endl;
-	cout << setw(2) << 7 << " / " << "Search books by author." << endl;
-	cout << setw(2) << 8 << " / " << "Search the newest book." << endl;
-	cout << setw(2) << 9 << " / " << "Exit." << endl;
-	cout << "Enter the number: ";
+	cout << "------------- ------------- -------------" << endl;
+	cout << "Меню:" << endl;
+	cout << " 1" << " / " << "Вывести содержимое архива на экран." << endl;
+	cout << " 2" << " / " << "Добавить книгу." << endl;
+	cout << " 3" << " / " << "Удалить книгу." << endl;
+	cout << " 4" << " / " << "Задание 1." << endl;
+	cout << " 5" << " / " << "Задание 2." << endl;
+	cout << " 6" << " / " << "Выход из программы." << endl;
+	cout << "Введите номер действия: ";
 	cin >> action;
 	return action;
 }
@@ -43,37 +40,61 @@ void Head()
 	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+" << endl;
 }
 
-int main()
+void in_file(archive & my_archive)
+{
+	int n;
+	cout << "Перезаписать получившуюся таблицу в файл?" << endl;
+	cout << "Нажмите 1, чтобы перезаписать." << endl;
+	cout << "Нажмите другую кнопку, чтобы выйти из программы." << endl;
+	cin >> n;
+	switch (n)
+	{
+	case 1: // Запись в файл.
+		my_archive.in_file();
+		break;
+	default:
+		n = -1;
+	}
+}
+
+void main()
 {
 	setlocale(LC_ALL, "rus");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
-	archive my_archive(1);
+	archive my_archive(25);
 	ifstream file;
 	file.open("Documents.txt");
-	my_archive.ReadDocuments(file);
+	my_archive.read_documents(file);
 	int action;
-	action = SelectAction();
-	cout << "----- ----- ----- -----" << endl;
-	switch (action)
+	do
 	{
-		case 1: // Добавить книги в коллекцию.
+		action = SelectAction();
+		cout << "------------- ------------- -------------" << endl;
+		switch (action)
+		{
+		case 1: // Вывести на экран.
+			my_archive.display_all();
+			break;
+		case 2: // Добавить книги в коллекцию.
 			my_archive.add_document(file);
 			break;
-		case 2: // Вывести задание 1
+		case 3: // Удалить книгу из коллекции 
+			my_archive.remove();
+			break;
+		case 4: // Вывести задание 1
 			my_archive.First();
 			break;
-		case 3: // Вывести задание 2
+		case 5: // Вывести задание 2
 			my_archive.Second();
-			break;
-		//case 4: // Удалить книгу из коллекции .my_archive.;
 			break;
 		default:
 			action = -1;
+		}
 	}
+	while (action != -1);
 	file.close();
-	return 0;
-
+	in_file(my_archive);
 }
 
 

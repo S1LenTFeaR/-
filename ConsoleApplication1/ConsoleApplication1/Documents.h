@@ -1,5 +1,3 @@
-#ifndef DOCUMENT_H
-#define DOCUMENT_H
 #include <string>
 #include <iostream> // Библиотека ввода-вывода.
 #include <fstream> // Библиотека файлового ввода-вывода.
@@ -18,11 +16,10 @@ class document
 		string name;									//Плательщик (name), ;
 		string address;									//Адрес(address)
 	public:
-		int ReadInt(istream & stream);					// Функция для чтения int из отдельной строки текстового потока
-		void ReadDocument(ifstream & stream);			//Функция чтения из файлы
-		void ReadDocument();							//Функция чтения из программы
+		void read_document(ifstream & stream);			//Функция чтения из файлы
+		void read_document();							//Функция чтения из программы
 		void display();							//Функция вывода на экран
-		void infile(ofstream & file, int k);			//Функция записи в файл
+		void infile(ofstream & file);			//Функция записи в файл
 		double get_total_price();
 		int get_count();
 		double get_total_area();
@@ -31,7 +28,3 @@ class document
 
 void Head();
 
-
-
-
-#endif

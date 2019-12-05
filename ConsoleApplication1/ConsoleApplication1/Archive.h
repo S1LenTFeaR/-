@@ -1,5 +1,3 @@
-#ifndef BOOKSTORE_H 
-#define BOOKSTORE_H 
 #include <string> 
 #include <fstream> 
 #include "Documents.h" 
@@ -18,16 +16,10 @@ public:
 	~archive();							// деструктор класса bookstore 
 	
 	void add_document(ifstream & file);
-	void ReadDocuments(ifstream & file);
+	void read_documents(ifstream & file);
 	void Second();
 	void First();
-	void display_all(unsigned int max_nd);
-	int get_nmd();
-
-
-
-
-
+	void display_all();
+	void remove();
+	void in_file();
 };
-
-#endif
