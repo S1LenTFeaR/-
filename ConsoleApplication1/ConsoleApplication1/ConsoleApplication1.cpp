@@ -60,15 +60,44 @@ void in_file(archive & my_archive)
 	}
 }
 
+// Функция для удаления документа из списка.
+void RemoveDocument(archive & my_archive)
+{
+	int index, n;
+	string ordered;
+	cout << "Введите номер участника: ";
+	cin >> n;
+	index = n-1;
+	document * removedDocument = my_archive.remove(index); // Удалить документ из списка.
+	if (removedDocument)
+	{ // Если документ удален.
+		cout << "Документ был удален." << endl;
+		Head();
+		removedDocument->display(); // Вывести документ на экран.
+		delete removedDocument; // Удалить объект документа.
+	}
+	else
+		cout << "Документ не был удален." << endl;
+}
+
+// Функция для добавления книги в контейнер с удалением объекта в случае неудачи.
+void AddBook(archive & my_archive, document * adocument)
+{
+	adocument->read_document();
+	my_archive.operator +=(adocument); // Добавить документ в контейнер.
+	Head();
+	cout << "|  ";
+	adocument->display(); // Вывести документ в строку таблицы.
+	cout << "Книга была добавлена." << endl;
+}
+
 int main()
 {
 	setlocale(LC_ALL, "rus");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 	archive my_archive(25); 
-	ifstream file;
-	file.open("Documents.txt");
-	my_archive.read_documents(file);
+	my_archive.read_documents();
 	int action;
 	do //Открываем меню заново до выхода из программы
 	{
@@ -79,11 +108,11 @@ int main()
 		case 1: // Вывести на экран.
 			my_archive.display_all();
 			break;
-		case 2: // Добавить документы в коллекцию.
-			my_archive.add_document(file);
+		case 2: // Добавить документ в коллекцию.
+			AddBook(my_archive, new document());
 			break;
 		case 3: // Удалить документ из коллекции 
-			my_archive.remove();
+			RemoveDocument(my_archive);
 			break;
 		case 4: // Вывести задание 1
 			my_archive.First();
@@ -96,9 +125,7 @@ int main()
 		}
 	}
 	while (action != -1);
-	file.close();
 	in_file(my_archive);
-	system("pause");
 	return 0;
 }
 

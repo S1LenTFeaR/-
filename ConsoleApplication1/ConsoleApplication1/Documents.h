@@ -1,12 +1,10 @@
+#include "pch.h"
 #include <string>
 #include <iostream> // Библиотека ввода-вывода.
 #include <fstream> // Библиотека файлового ввода-вывода.
 #include <iomanip> // Библиотека для использования манипуляторов ввода-вывода.
 
-using std::string;
-using std::ifstream;
-using std::ofstream;
-using std::istream;
+using namespace std;
 
 class document
 {
@@ -16,14 +14,21 @@ class document
 		string name;									//Плательщик (name), ;
 		string address;									//Адрес(address)
 	public:
-		void read_document(ifstream & stream);			//Функция чтения из файлы
+		void read_document(istream & stream);			//Функция чтения из файлы
 		void read_document();							//Функция чтения из программы
-		void display();							//Функция вывода на экран
-		void infile(ofstream & file);			//Функция записи в файл
+		void display();									//Функция вывода на экран
+		void infile(ostream & stream) const;			//Функция записи в файл
 		double get_total_price();
 		int get_count();
 		double get_total_area();
 		double get_living_area();
+
+		// Оператор записи в поток.
+		friend ostream& operator<<(ostream & stream, const document & adocument);
+		// Оператор чтения из потока.
+		friend istream& operator>>(istream & stream, document & adocument);
+		// Оператор проверки равенства.
+		bool operator==(const document & another);
 };
 
 void Head();

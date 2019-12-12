@@ -1,9 +1,5 @@
-#include "stdafx.h"
 #include "pch.h"
 #include "Documents.h"
-#include <iostream>
-#include <iomanip> // Библиотека для использования манипуляторов ввода-вывода.
-#include <Windows.h> // решение проблем кодировки текста
 using namespace std;
 
 //Геттер
@@ -31,15 +27,16 @@ double document::get_living_area()
 }
 
 //Чтение документа из файла
-void document::read_document(ifstream & file)
+void document::read_document(istream & stream)
 {
-	file >> name;
-	file >> account;
-	file >> address;
-	file >> count;
-	file >> total_area;
-	file >> living_area;
-	file >> total_price;
+	stream
+		>> name
+		>> account
+		>> address
+		>> count
+		>> total_area
+		>> living_area
+		>> total_price;
 }
 
 //Чтение документа с клавиатуры
@@ -75,13 +72,41 @@ void document::display()
 }
 
 //Запись документа в файл
-void document::infile(ofstream & file)
+void document::infile(ostream & stream) const
 {
-	file << name << endl;
-	file << account << endl;
-	file << address << endl;
-	file << count << endl;
-	file << total_area << endl;
-	file << living_area << endl;
-	file << total_price << endl;
+	stream
+		<< name << endl
+		<< account << endl
+		<< address << endl
+		<< count << endl
+		<< total_area << endl
+		<< living_area << endl
+		<< total_price << endl;
+}
+
+// Переопределение операторов.
+// Оператор проверки равенства.
+bool document::operator==(const document & another)
+{
+	return
+		another.name == name &&
+		another.account == account &&
+		another.address == address &&
+		another.count == count &&
+		another.total_area == total_area &&
+		another.living_area == living_area &&
+		another.total_price == total_price;
+}
+
+ostream& operator<<(ostream & stream, const document & adocument)
+{
+	adocument.infile(stream);
+	return stream;
+}
+
+// Оператор чтения из потока.
+istream& operator>>(istream & stream, document & adocument)
+{
+	adocument.read_document(stream);
+	return stream;
 }
