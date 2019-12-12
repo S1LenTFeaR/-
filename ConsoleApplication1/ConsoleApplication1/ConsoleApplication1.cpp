@@ -71,9 +71,10 @@ void RemoveDocument(archive & my_archive)
 	document * removedDocument = my_archive.remove(index); // Удалить документ из списка.
 	if (removedDocument)
 	{ // Если документ удален.
-		cout << "Документ был удален." << endl;
 		Head();
+		cout << "|  ";
 		removedDocument->display(); // Вывести документ на экран.
+		cout << "Документ был удален." << endl;
 		delete removedDocument; // Удалить объект документа.
 	}
 	else
