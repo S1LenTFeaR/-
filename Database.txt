@@ -378,6 +378,59 @@ INSERT INTO Чек VALUES(NULL,2,'2019-10-29',85.00,3);	//Чизбургер, л
  
  INSERT INTO v3_2 VALUES('Лимоны',9,60);
  
+ По умолчанию уровень изоляции устанавливается для последующей (не начальной) транзакции. 
+ При использовании ключевого слова GLOBAL данная команда устанавливает уровень изоляции 
+ по умолчанию глобально для всех новых соединений, созданных от этого момента. 
+ Однако для того чтобы выполнить данную команду, необходима привилегия SUPER. 
+ При использовании ключевого слова SESSION устанавливается уровень изоляции по 
+ умолчанию для всех будущих транзакций, выполняемых в текущем соединении.
+ 
+ 
+ SET [GLOBAL | SESSION] TRANSACTION ISOLATION LEVEL
+{ READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE }
+
+ SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+ 
+ set autocommit=0;
+ 
+ Start transaction; 
+ (также, можно написать BEGIN; )
+ 
+ ROLLBACK;
+ COMMIT;
+ 
+ END;
+ 
+ BEGIN;
+ INSERT INTO v3_2 VALUES('Лимоны',9,60);
+ SELECT * FROM Продукция;
+ CALL z5 ("Банан", 0.1);
+ SELECT * FROM Продукция;
+ ROLLBACK;
+ SELECT * FROM Продукция;
+ 
+ INSERT INTO Продукция VALUES('Печенье',3,70.00);
+ INSERT INTO Товар(Название_продукции) VALUES('Печенье'); 
+ INSERT INTO Товар(Название_продукции) VALUES('Печенье'); 
+ INSERT INTO Товар(Название_продукции) VALUES('Печенье'); 
+ SELECT * FROM Продукция;
+ SELECT * FROM Товар;
+ ROLLBACK;
+ SELECT * FROM Продукция;
+ SELECT * FROM Товар;
+ 
+ INSERT INTO Продукция VALUES('Печенье',3,70.00);
+ INSERT INTO Товар(Название_продукции) VALUES('Печенье'); 
+ INSERT INTO Товар(Название_продукции) VALUES('Печенье'); 
+ INSERT INTO Товар(Название_продукции) VALUES('Печенье'); 
+ SELECT * FROM Продукция;
+ SELECT * FROM Товар;
+ COMMIT;
+ SELECT * FROM Продукция;
+ SELECT * FROM Товар;
+ ROLLBACK;
+ SELECT * FROM Продукция;
+ SELECT * FROM Товар;
  
  
  
