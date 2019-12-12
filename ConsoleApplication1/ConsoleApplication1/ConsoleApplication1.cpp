@@ -1,4 +1,4 @@
-﻿#include "stdafx.h"
+﻿//#include "stdafx.h"
 #include "pch.h"
 #include "Archive.h"
 #include <locale> // поддержка русского алфавита
@@ -10,6 +10,7 @@
 
 using namespace std;
 
+//Вывод меню на экран и выбор действия
 int SelectAction()
 {
 	int action;
@@ -26,6 +27,7 @@ int SelectAction()
 	return action;
 }
 
+//Шапка
 void Head()
 {
 	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+" << endl;
@@ -40,6 +42,7 @@ void Head()
 	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+" << endl;
 }
 
+//Перезапись файла
 void in_file(archive & my_archive)
 {
 	int n;
@@ -62,12 +65,12 @@ int main()
 	setlocale(LC_ALL, "rus");
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
-	archive my_archive(25);
+	archive my_archive(25); 
 	ifstream file;
 	file.open("Documents.txt");
 	my_archive.read_documents(file);
 	int action;
-	do
+	do //Открываем меню заново до выхода из программы
 	{
 		action = SelectAction();
 		cout << "------------- ------------- -------------" << endl;
@@ -95,6 +98,7 @@ int main()
 	while (action != -1);
 	file.close();
 	in_file(my_archive);
+	system("pause");
 	return 0;
 }
 

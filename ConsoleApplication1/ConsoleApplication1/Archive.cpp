@@ -25,7 +25,7 @@ archive::~archive()
 	cout << "\n выделенная память освобождена";
 }
 
-
+//Чтение документов из файла
 void archive::read_documents(ifstream & file)
 { 
 	if (!file.is_open()) 
@@ -43,22 +43,21 @@ void archive::read_documents(ifstream & file)
 	Num_Documents = Count_File;
 }
 
+//Добавление документов в файл
 void archive::add_document(ifstream & file)
 {
 	int i;
-	int Count_Keyboard;
-	cout << "Введите количество документов, которые хотите добавить: ";
-	cin >> Count_Keyboard;
-	if (Num_Documents + Count_Keyboard <= Max_Num_Documents)     // можем добавить еще один документ? 
+	if (Num_Documents + 1 <= Max_Num_Documents) 
 	{
-		for (i = Num_Documents; i < Num_Documents + Count_Keyboard; i++)
+		for (i = Num_Documents; i < Num_Documents + 1; i++)
 		{
 			documents[Num_Documents].read_document();
 		}
 	}
-	Num_Documents = Num_Documents + Count_Keyboard;
+	Num_Documents = Num_Documents + 1;
 }
 
+//Вывести таблицу на экран
 void archive::display_all()
 { 
 	Head();
@@ -69,17 +68,19 @@ void archive::display_all()
 	}
 }
 
-void archive::remove() //Удаление документа
+//Удаление документа
+void archive::remove()
 {
 	int i, n;
 	cin >> n;
 	for (i = n-1; i < Num_Documents; i++)
 	{
-		documents[i] = documents[i + 1]; //Смещение документов на 1 позицию назад
+		documents[i] = documents[i + 1];
 	}
 	Num_Documents--;
 }
 
+//Перезапись файла
 void archive::in_file()
 {
 	ofstream file;
@@ -94,32 +95,28 @@ void archive::in_file()
 	file.close();
 }
 
-void archive::First() //Первое задание
+//Первое задание
+void archive::First() 
 {
-	int i;
-	
 	Head();
-	for (i = 0; i < Num_Documents; i++)
+	for (int i = 0; i < Num_Documents; i++)
 	{
 		if (documents[i].get_total_area() > 50 || documents[i].get_living_area() > 50)
 		{
-
 			cout << "|" << left << setw(2) << i + 1;
 			documents[i].display();
 		}
 	}
 }
 
-void archive::Second() //Второе задание
+//Второе задание
+void archive::Second() 
 {
-	int i;
-	
 	Head();
-	for (i = 0; i < Num_Documents; i++)
+	for (int i = 0; i < Num_Documents; i++)
 	{
 		if (documents[i].get_total_price() > 3000 && documents[i].get_count() == 0)
 		{
-
 			cout << "|" << left << setw(2) << i + 1;
 			documents[i].display();
 		}

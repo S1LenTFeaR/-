@@ -5,12 +5,9 @@
 class archive
 {
 private:
-	int Max_Num_Documents;				// максимальное кол-во книг в магазине (вместимость) 
-	int Num_Documents;					// текущее число книг в магазине 
-	document *documents;				// массив объектов класса book 
-
-
-
+	int Max_Num_Documents;				// максимальное кол-во документов в архиве (вместимость) 
+	int Num_Documents;					// текущее число документов в архиве 
+	document *documents;				// массив объектов класса document
 public:
 	archive(unsigned int max_nd);		// конструктор класса archive                  
 	~archive();							// деструктор класса archive 

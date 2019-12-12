@@ -6,27 +6,31 @@
 #include <Windows.h> // решение проблем кодировки текста
 using namespace std;
 
-
+//Геттер
 double document::get_total_price()
 {
 	return total_price;
 }
 
+//Геттер
 int document::get_count()
 {
 	return count;
 }
 
+//Геттер
 double document::get_total_area()
 {
 	return total_area;
 }
 
+//Геттер
 double document::get_living_area()
 {
 	return living_area;
 }
 
+//Чтение документа из файла
 void document::read_document(ifstream & file)
 {
 	file >> name;
@@ -38,6 +42,7 @@ void document::read_document(ifstream & file)
 	file >> total_price;
 }
 
+//Чтение документа с клавиатуры
 void document::read_document()
 {
 	cout << "Введите имя: ";
@@ -56,6 +61,7 @@ void document::read_document()
 	cin >> total_price;
 }
 
+//Вывод документа на экран
 void document::display()
 {
 	cout << "|" << left << setw(11) << name;
@@ -68,6 +74,7 @@ void document::display()
 	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+" << endl;
 }
 
+//Запись документа в файл
 void document::infile(ofstream & file)
 {
 	file << name << endl;
