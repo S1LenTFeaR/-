@@ -2,76 +2,67 @@
 #include <clocale>
 #include <cstdlib>
 #include <cstring>
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <cmath>
-#define Z 79
+
 
 using namespace std;
 
-//Задаем начальные значение
-double xmin = -3;
-double x = xmin;
-double xmax = 1;
-double ymin = 0.1;
-double y = ymin;
-double ymax = 5;
-double dt = 0.01;
-double t = 0;
-double tk = 5;
-double Vx = 3;
-double Vy = 0;
+float N = 0.0;
 
+double I_0 = 0.0;
+double I = 0.0;
+double Beta = 0.0;
+double Omega_0 = 0.0;
+double q_0 = 0.0;
+double E_max = 0.0;
+double L = 0.0;
+double Omega = 0.0;
+double t = 0.0;
+double dt = 0.00001;
+double t_i = 0.0;
+double q = 0.0;
+double R = 0.0;
+double C = 0.0;
+double nu = 0.0;
+double E = 0.0;
+
+void polet(ofstream & kI, ofstream & kq)
+{
+	I = 0; //Сила тока [А]
+	q = 2 * pow(10, -6); //Заряд конденсатора [Кл]
+	R = 200;
+	L = 0.5; //Индуктивность [Гн]
+	C = 0.5 * pow(10, -6);
+	t = 0;
+	dt = 0.00001;
+	E = 10;
+	Beta = R / (2 * L); //Коэффицент затухания
+	Omega_0 = sqrt(1 / (L * C));
+	Omega = sqrt(Omega_0 * Omega_0 - Beta * Beta);
+	double E_max = 220;
+	I -= (2 * Beta * I + Omega_0 * Omega_0 * q - (E_max * cos(Omega * t) / L)) * (dt / 2.0);
+
+	while (t <= 3)
+	{
+		I -= (2 * Beta * I + Omega_0 * Omega_0 * q - (E_max * cos(Omega * t) / L)) * dt;
+		q = q + I * dt;
+		E = E_max * cos(Omega * t);
+		t += dt;
+		kI << fixed << setprecision(3) << t * 2500 << ";" << setprecision(3) << I * 30 << endl;
+		kq << fixed << setprecision(3) << t * 2500 << ";" << setprecision(3) << q * 6500 << endl;
+	}
+}
 
 int main()
 {
-	ofstream file("Polet.txt");
-	double e = 1.602189246 * pow(10, -19);
-	double k = 8.987551777 * pow(10, 9);
-	double Ma = 6.638 * pow(10, -27);
-	double kof = (2 * k * Z * e * e) / Ma;
-	while ((t <= tk) && (x <= xmax) && (y <= ymax))
-	{
-		Vx = Vx + kof * abs(x) * pow(x * x + y * y, -1.5) * dt;
-		Vy = Vy + kof * abs(y) * pow(x * x + y * y, -1.5) * dt;
-		x += Vx * dt;
-		y += Vy * dt;
-		t += dt;
-		if ((x <= xmax) && (y <= ymax))
-			file << x << ";" << y << endl;
-	}
-	/*Vx = 3;
-	Vy = 0;
-	x = -3;
-	y = 0.3;
-	t = 0;
-	while ((t <= tk) && (x <= xmax) && (y <= ymax))
-	{
-		Vx = Vx + kof * abs(x) * pow(x * x + y * y, -1.5) * dt;
-		Vy = Vy + kof * abs(y) * pow(x * x + y * y, -1.5) * dt;
-		x += Vx * dt;
-		y += Vy * dt;
-		t += dt;
-		if ((x <= xmax) && (y <= ymax))
-			file << x << ";" << y << endl;
-	}
-	Vx = 3;
-	Vy = 0;
-	x = -3;
-	y = 0.5;
-	t = 0;
-	while ((t <= tk) && (x <= xmax) && (y <= ymax))
-	{
-		Vx = Vx + kof * abs(x) * pow(x * x + y * y, -1.5) * dt;
-		Vy = Vy + kof * abs(y) * pow(x * x + y * y, -1.5) * dt;
-		x += Vx * dt;
-		y += Vy * dt;
-		t += dt;
-		if ((x <= xmax) && (y <= ymax))
-			file << x << ";" << y << endl;
-	}*/
-
-	system("pause");
+	ofstream kI("I.txt");
+	ofstream kq("q.txt");
+	polet(kI, kq);
+	kI.close();
+	kq.close();
 	return 0;
 }

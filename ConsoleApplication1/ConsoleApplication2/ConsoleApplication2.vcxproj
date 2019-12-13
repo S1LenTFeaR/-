@@ -166,7 +166,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Polet.txt" />
+    <Text Include="I.txt" />
+    <Text Include="q.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
