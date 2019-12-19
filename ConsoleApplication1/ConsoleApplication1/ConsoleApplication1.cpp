@@ -30,7 +30,7 @@ int SelectAction()
 //Шапка
 void Head()
 {
-	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+" << endl;
+	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+------+----+" << endl;
 	cout << left << setw(3) << "|№";
 	cout << left << setw(12) << "|Имя";
 	cout << left << setw(12) << "|Л.Счет";
@@ -38,10 +38,18 @@ void Head()
 	cout << left << setw(5) << "|Уч-в";
 	cout << left << setw(8) << "|S общая";
 	cout << left << setw(8) << "|S жилая";
-	cout << left << setw(7) << "|Оплата" << "|" << endl;
-	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+" << endl;
+	cout << left << setw(7) << "|Оплата";
+	cout << left << setw(7) << "|Место";
+	cout << left << setw(5) << "|Год" << "|" << endl;
+	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+------+----+" << endl;
 }
-
+// Функция для чтения списка документов из потока.
+void ReadDocuments(archive & my_archive)
+{
+	ifstream file("Documents.txt");
+	my_archive.read_documents(file);
+	file.close();
+}
 //Перезапись файла
 void in_file(archive & my_archive)
 {
@@ -98,7 +106,7 @@ int main()
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 	archive my_archive(25); 
-	my_archive.read_documents();
+	ReadDocuments(my_archive);
 	int action;
 	do //Открываем меню заново до выхода из программы
 	{

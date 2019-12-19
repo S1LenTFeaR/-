@@ -1,8 +1,9 @@
+#pragma once
 #include "pch.h"
 #include <string> 
 #include <iostream> 
 #include <fstream> 
-#include "Documents.h" 
+#include "IssuedDocument.h" 
 
 using namespace std;
 
@@ -17,7 +18,7 @@ public:
 	~archive();							// деструктор класса archive 
 	
 	void add_document(const document * adocument);
-	void read_documents();
+	void read_documents(istream & stream);
 	void Second();
 	void First();
 	void display_all();

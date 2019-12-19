@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <typeinfo>
 #include "Archive.h"
 
 using namespace std;
@@ -25,17 +26,16 @@ archive::~archive()
 }
 
 //Чтение документов из файла
-void archive::read_documents()
+void archive::read_documents(istream & stream)
 { 
-	ifstream file("Documents.txt");
 	int Count_File;
-	file >> Count_File;
+	stream >> Count_File;
 	for (int i = Num_Documents; i < Count_File; i++)
 	{
-		documents[i] = new document();
-		file >> *(documents[i]);
+		documents[i] = new IssuedDocument();
+		documents[i]->read_document(stream);
+		// Метод read_document виртуальный - будет вызван метод именно того класса, на объект которого указывает documents[i].
 	}
-	file.close();
 	Num_Documents = Count_File;
 	cout << "\nЗагружены данные из файла " << "Documents.txt" << ":";  cout << "\nчисло загруженных документов - " << Num_Documents << endl;
 }

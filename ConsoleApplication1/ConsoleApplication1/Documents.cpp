@@ -67,8 +67,7 @@ void document::display()
 	cout << "|" << left << setw(4) << count;
 	cout << "|" << left << setw(7) << total_area;
 	cout << "|" << left << setw(7) << living_area;
-	cout << "|" << left << setw(6) << total_price << "|" << endl;
-	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+" << endl;
+	cout << "|" << left << setw(6) << total_price << endl;
 }
 
 //Запись документа в файл
@@ -98,15 +97,19 @@ bool document::operator==(const document & another)
 		another.total_price == total_price;
 }
 
-ostream& operator<<(ostream & stream, const document & adocument)
-{
-	adocument.infile(stream);
-	return stream;
+document::document(string nme, int acc, string adr, int cou, double tar, double lir , double tpr)
+{ 
+	name = nme;
+	account = acc;
+	address = adr;
+	count = cou;
+	total_area = tar;
+	living_area = lir;
+	total_price = tpr;
+	cout << "\nВызван конструктор класса document"; 
 }
 
-// Оператор чтения из потока.
-istream& operator>>(istream & stream, document & adocument)
+document::~document()
 {
-	adocument.read_document(stream);
-	return stream;
+	cout << "\nВызван деконструктор класса document";
 }

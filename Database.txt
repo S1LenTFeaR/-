@@ -391,7 +391,7 @@ INSERT INTO Чек VALUES(NULL,2,'2019-10-29',85.00,3);	//Чизбургер, л
 
  SET GLOBAL TRANSACTION ISOLATION LEVEL SERIALIZABLE;
  
- set autocommit=0;
+  set autocommit=0;
  
  Start transaction; 
  (также, можно написать BEGIN; )
@@ -404,11 +404,11 @@ INSERT INTO Чек VALUES(NULL,2,'2019-10-29',85.00,3);	//Чизбургер, л
  BEGIN;
  INSERT INTO v3_2 VALUES('Лимоны',9,60);
  SELECT * FROM Продукция;
- CALL z5 ("Банан", 0.1);
+ CALL z4 ("Банан", 0.1);
  SELECT * FROM Продукция;
  ROLLBACK;
  SELECT * FROM Продукция;
- 
+
  INSERT INTO Продукция VALUES('Печенье',3,70.00);
  INSERT INTO Товар(Название_продукции) VALUES('Печенье'); 
  INSERT INTO Товар(Название_продукции) VALUES('Печенье'); 
@@ -431,23 +431,63 @@ INSERT INTO Чек VALUES(NULL,2,'2019-10-29',85.00,3);	//Чизбургер, л
  ROLLBACK;
  SELECT * FROM Продукция;
  SELECT * FROM Товар;
- 
- 
- 
+
+ SAVEPOINT s1;
+ SELECT * FROM Продукция;
+ SELECT * FROM Товар;
+ ROLLBACK WORK TO SAVEPOINT s1;
+ DELETE FROM Продукция WHERE Название_продукции='Печенье';
+ DELETE FROM Товар WHERE Название_продукции='Печенье';
+ SAVEPOINT s2;
+ SELECT * FROM Продукция;
+ SELECT * FROM Товар;
+ ROLLBACK WORK TO SAVEPOINT s1;
+ SELECT * FROM Продукция;
+ SELECT * FROM Товар;
 
 
+ Неповторяющееся чтение
+ Транзакция 1						Транзакция 2
+ SELECT Стоимость_продукции FROM Продукция		SELECT Стоимость_продукции FROM Продукция
+ WHERE Название_продукции='Банан';			WHERE Название_продукции='Банан';
+
+ UPDATE Продукция SET Стоимость_продукции=60
+ WHERE Название_продукции='Банан';
+							SELECT Стоимость_продукции FROM Продукция
+							WHERE Название_продукции='Банан';
+
+ Грязное чтение
+ Транзакция 1						Транзакция 2
+ SELECT Стоимость_продукции FROM Продукция		
+ WHERE Название_продукции='Банан';
+
+ UPDATE Продукция SET Стоимость_продукции=20		
+ WHERE Название_продукции='Банан';
+							SELECT Стоимость_продукции FROM Продукция		
+							WHERE Название_продукции='Банан';
+
+ ROLLBACK;
+ SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITED;
  
+ https://losst.ru/sozdanie-polzovatelya-mysql
  
+ CREATE USER test_user111@localhost IDENTIFIED BY '123451';
+ Показать пользователей:
+ SELECT User,Host FROM mysql.user;
+ Выдаем привелегии:
+ GRANT SELECT ON Товар TO test_user111@localhost;
+ Посмотрим привилегии нашего пользователя:
+ SHOW GRANTS FOR test_user111@localhost;
+ После обновления прав пользователя необходимо обновить таблицу прав пользователей MySQL в памяти.
+ FLUSH PRIVILEGES;
+ Заберём все права
+ REVOKE ALL PRIVILEGES ON Товар FROM test_user111@localhost;
  
- 
- 
- 
- 
- 
- 
- 
- 
- 
+ CREATE USER test_user112@localhost IDENTIFIED BY '123451';
+ GRANT ALL PRIVILEGES ON Товар TO test_user112@localhost WITH GRANT OPTION;
+ GRANT ALL PRIVILEGES ON Продукция TO test_user112@localhost WITH GRANT OPTION;
+ SHOW GRANTS FOR test_user112@localhost;
+
 
 
  
