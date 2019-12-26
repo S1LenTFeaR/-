@@ -1,128 +1,466 @@
-﻿//Подключаем библиотеку glut.h и cmath
-#include "pch.h"
-#include "glut.h"
-#include <cmath>
-#include <iostream>
-
+﻿#include"pch.h"
+#include<iostream> 
+#include"glut.h"
+#include<clocale> 
+#include<cmath> 
 using namespace std;
-
-float N = 0.0;
-
-//Начальные данные
-double I = 0; //Сила тока [А]
-double q = 2 * pow(10, -6); //Заряд конденсатора [Кл]
-double R = 200;
-double L = 0.5; //Индуктивность [Гн]
-double C = 0.5 * pow(10, -6);
-double t = 0;
-double dt = 0.00001;
-double E = 0;
-double E_max = 20;
-double Beta = 0.0;
-double Omega_0 = 0.0;
-double Omega = 0.0;
-
-void change_size(GLsizei w, GLsizei h) {
+#define step 0.00001 
+#define pi 3.14159 
+void initialise()
+{
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+}
+void change_size_xy(GLsizei w, GLsizei h)
+{
+	double wh = 0.01;
 	GLdouble aspect_ratio;
-	//Предотвращается деление на 0 
 	if (h == 0)
 		h = 1;
-	//Устанавливается поле просмотра с размерами окна 
 	glViewport(0, 0, w, h);
-	//Обновляется система координат 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	//С помощью плоскостей отсечения (левая, правая, нижняя, //верхняя, ближняя, дальняя) устанавливается объем отсечения 
 	aspect_ratio = (GLdouble)w / (GLdouble)h;
-	gluPerspective(150.0, aspect_ratio, 1, 100.0);
-	glTranslatef(0.0, 0.0, -15.0);
+	if (w <= h)
+		glOrtho(15 * wh, 15 * wh, -15 * wh / aspect_ratio, 15 * wh / aspect_ratio, -1.0, 1.0);
+	else
+		glOrtho(-15 * wh*aspect_ratio, 15 * wh*aspect_ratio, -15 * wh, 15 * wh, -1.0, 1.0);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
-
-void initialise() {
-	//Задается цвет очистки окна - черный
-	glClearColor(0.0, 0.0, 0.0, 0.0);
-}
-
-void render_scene() {
-	//Очищается окно, используя текущий цвет очистки 
+void display_xy()
+{
 	glClear(GL_COLOR_BUFFER_BIT);
-	//В качестве текущего цвета рисования задаем красный 
-	//R G B 
-	glColor3f(1.0, 1.0, 1.0);
-	glLineWidth(1);
-	//Рисуем координатную систему:
-	//Рисуем ось Ox
-	glBegin(GL_LINES);
-	glVertex2f(-100.0, 0.0);
-	glVertex2f(100.0, 0.0);
-	glEnd();
-	//Рисуем ось Оу 
-	glBegin(GL_LINES);
-	glVertex2f(0.0, -60.0);
-	glVertex2f(0.0, 60.0);
-	glEnd();
-
-	glBegin(GL_LINES);
-	glVertex3f(0.0, 0.0, -60.0);
-	glVertex3f(0.0, 0.0, 60.0);
-	glEnd();
-
-	Beta = R / (2 * L); //Коэффицент затухания
-	Omega_0 = sqrt(1 / (L * C));
-	Omega = sqrt(Omega_0 * Omega_0 - Beta * Beta);
-	I -= (2 * Beta * I + Omega_0 * Omega_0 * q - (E_max * cos(Omega * t) / L)) * (dt / 2.0);
-	glPointSize(1);
-	glBegin(GL_LINE_STRIP);
-	glColor3f(0.42, 1, 0.95);
-	while (t <= N) {
-		glVertex2d(t * 2500, I * 300);
-		//glVertex2d(t * 2500, q * 600000);
-		//glVertex2d(t * 2500, E * 1.5);
-		I -= (2 * Beta * I + Omega_0 * Omega_0 * q - (E_max * cos(Omega * t) / L)) * dt;
-		q = q + I * dt;
-		E = E_max * cos(Omega * t);
-		t += dt;
-	}
-	glEnd();
-	glFlush();                            //Освобождает буферы
-	glutSwapBuffers();                    //смена переднего и заднего буферов
-}
-
-void keyboard_func(unsigned char key, int x, int y)
-{
-	switch (key)
+	glColor3f(0.5, 0.5, 0.5);
+	for (double i = -10; i <= 10; i += step * 10000)
 	{
-	case 'w':
-		N += 0.1;
-		if (N < 10000) render_scene();
-		break;
-	case 27:	//Escape
-		exit(0);
+		glBegin(GL_LINES);
+		glVertex2d(i, -10.0);
+		glVertex2d(i, 10.0);
+		glEnd();
 	}
+	for (double i = -10; i <= 10; i += step * 10000)
+	{
+		glBegin(GL_LINES);
+		glVertex2d(-10.0, i);
+		glVertex2d(10.0, i);
+		glEnd();
+	}
+	glColor3f(1.0, 0.0, 0.0);
+	glBegin(GL_LINES);
+	glVertex2d(-10.0, 0.0);
+	glVertex2d(10.0, 0.0);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex2d(0.0, -10.0);
+	glVertex2d(0.0, 10.0);
+	glEnd();
+	glColor3f(1.0, 0.0, 1.0);
+	//Начальные условия модели 1 
+	double q = 5;
+	double m = 0.05;
+	double v = 300;
+	double B = 100;
+	double R = 0.05;
+	double x0 = 0.0, y0 = R;
+	double v0x = v, v0y = 0.0;
+	double vx, vy;
+	double x, y;
+	x = x0;
+	y = y0;
+	glBegin(GL_POINTS);
+	glVertex2d(x, y);
+	glEnd();
+	vx = v0x - (q*B*v0y / m)*step / 2;
+	vy = v0y - (-q * B*v0x / m)*step / 2;
+	for (double t = step; t < step * 1000; t += step)
+	{
+		glBegin(GL_LINES);
+		glVertex2d(x, y);
+		vx = vx - (q*B*vy / m)*step;
+		vy = vy - (-q * B*vx / m)*step;
+		x = x + vx * step;
+		y = y + vy * step;
+		glVertex2d(x, y);
+		glEnd();
+	}
+	glFlush();
 }
-
-static void reshape_view(GLsizei w, GLsizei h)
+void look()
 {
+	glMatrixMode(GL_MODELVIEW);
+	gluLookAt(0.1, -0.1, 0.1, 0, 0, 0, 0, 0, 0.8);
+}
+void change_size_xyz(GLsizei w, GLsizei h)
+{
+	double wh = 0.01;
+	GLdouble aspect_ratio;
+	if (h == 0)
+		h = 1;
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
+	aspect_ratio = (GLdouble)w / (GLdouble)h;
+	if (w <= h)
+		glOrtho(25 * wh, 25 * wh, -25 * wh / aspect_ratio, 25 * wh / aspect_ratio, -5, 5);
+	else
+		glOrtho(-25 * wh*aspect_ratio, 25 * wh*aspect_ratio, -25 * wh, 25 * wh, -5, 5);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	look();
 }
-
-int main(int argc, char** argv)
+GLdouble angle = 45;
+void Rotate()
+{
+	angle += 0.05;
+	if (angle > 360) angle = 0;
+}
+void display_xyz()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	look();
+	glPushMatrix();
+	glColor3f(1.0, 0.0, 0.0);
+	glBegin(GL_LINES);
+	glVertex3d(0.0, 0.0, 0.0);
+	glVertex3d(100.0, 0.0, 0.0);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex3d(0.0, 100.0, 0.0);
+	glVertex3d(0.0, 0.0, 0.0);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex3d(0.0, 0.0, 100.0);
+	glVertex3d(0.0, 0.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	glPushMatrix();
+	glColor3f(0.0, 1.0, 0.0);
+	//Начальные условия модели 2 
+	double z0 = 0.0;
+	double vz = 0.0;
+	double alpha = pi / 3;
+	double q = 5;
+	double m = 0.05;
+	double v = 300;
+	double B = 100;
+	double R = 0.05;
+	double x0 = 0.0, y0 = R;
+	double v0x = v, v0y = 0.0;
+	double vx, vy;
+	double x, y;
+	x = x0;
+	y = y0;
+	v0x = v * sin(alpha), v0y = 0.0*sin(alpha);
+	vz = v * cos(alpha);
+	vx = v0x - (q*B*v0y / m)*step / 2;
+	vx = vx * sin(alpha);
+	vy = v0y - (-q * B*v0x / m)*step / 2;
+	vy = vy * sin(alpha);
+	double z = z0;
+	glBegin(GL_POINTS);
+	glVertex3d(x, y, z);
+	glEnd();
+	for (double t = step;
+		t < step * 1000; t += step)
+	{
+		glBegin(GL_LINES);
+		glVertex3d(x, y, z);
+		vx = vx - (q*B*vy / m)*step;
+		vy = vy - (-q * B*vx / m)*step;
+		x = x + vx * step;
+		y = y + vy * step;
+		z = z + vz * step;
+		glVertex3d(x, y, z);
+		glEnd();
+	}
+	glPopMatrix();
+	glutSwapBuffers();
+}
+void change_size_xy2(GLsizei w, GLsizei h)
+{
+	double wh = 0.01;
+	GLdouble aspect_ratio;
+	if (h == 0)
+		h = 1;
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	aspect_ratio = (GLdouble)w / (GLdouble)h;
+	if (w <= h)
+		glOrtho(15 * wh, 15 * wh, -15 * wh / aspect_ratio, 15 * wh / aspect_ratio, -1.0, 1.0);
+	else
+		glOrtho(-15 * wh*aspect_ratio, 15 * wh*aspect_ratio, -15 * wh, 15 * wh, -1.0, 1.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+void display_xy2()
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0.5, 0.5, 0.5);
+	for (double i = -10; i <= 10; i += step * 10000)
+	{
+		glBegin(GL_LINES);
+		glVertex2d(i, -10.0);
+		glVertex2d(i, 10.0);
+		glEnd();
+	}
+	for (double i = -10; i <= 10; i += step * 10000)
+	{
+		glBegin(GL_LINES);
+		glVertex2d(-10.0, i);
+		glVertex2d(10.0, i);
+		glEnd();
+	}
+	glColor3f(1.0, 0.0, 0.0);
+	glBegin(GL_LINES);
+	glVertex2d(-10.0, 0.0);
+	glVertex2d(10.0, 0.0);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex2d(0.0, -10.0);
+	glVertex2d(0.0, 10.0);
+	glEnd();
+	glColor3f(0.0, 1.0, 1.0);
+	//Начальные условия модели 2 
+	double z0 = 0.0;
+	double vz = 0.0;
+	double alpha = pi / 3;
+	double q = 5;
+	double m = 0.05;
+	double v = 300;
+	double B = 100;
+	double R = 0.05;
+	double x0 = 0.0, y0 = R;
+	double v0x = v, v0y = 0.0;
+	double vx, vy;
+	double x, y;
+	x = x0;
+	y = y0;
+	v0x = v * sin(alpha), v0y = 0.0*sin(alpha);
+	vz = v * cos(alpha);
+	vx = v0x - (q*B*v0y / m)*step / 2;
+	vx = vx * sin(alpha);
+	vy = v0y - (-q * B*v0x / m)*step / 2;
+	vy = vy * sin(alpha);
+	double z = z0;
+	glBegin(GL_POINTS);
+	glVertex2d(x, y);
+	glEnd();
+	for (double t = step; t < step * 1000; t += step)
+	{
+		glBegin(GL_LINES);
+		glVertex2d(x, y);
+		vx = vx - (q*B*vy / m)*step;
+		vy = vy - (-q * B*vx / m)*step;
+		x = x + vx * step;
+		y = y + vy * step;
+		z = z + vz * step;
+		glVertex2d(x, y);
+		glEnd();
+	}
+}
+void change_size_xz(GLsizei w, GLsizei h)
+{
+	double wh = 0.01;
+	GLdouble aspect_ratio;
+	if (h == 0)
+		h = 1;
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	aspect_ratio = (GLdouble)w / (GLdouble)h;
+	if (w <= h)
+		glOrtho(18 * wh, 18 * wh, -18 * wh / aspect_ratio, 18 * wh / aspect_ratio, -1.0, 1.0);
+	else
+		glOrtho(-18 * wh*aspect_ratio, 18 * wh*aspect_ratio, -18 * wh, 18 * wh, -1.0, 1.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+void display_xz()
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0.5, 0.5, 0.5);
+	for (double i = -10; i <= 10; i += step * 10000)
+	{
+		glBegin(GL_LINES);
+		glVertex2d(i, -10.0);
+		glVertex2d(i, 10.0);
+		glEnd();
+	}
+	for (double i = -10; i <= 10; i += step * 10000)
+	{
+		glBegin(GL_LINES);
+		glVertex2d(-10.0, i);
+		glVertex2d(10.0, i);
+		glEnd();
+	}
+	glColor3f(1.0, 0.0, 0.0);
+	glBegin(GL_LINES);
+	glVertex2d(-10.0, 0.0);
+	glVertex2d(10.0, 0.0);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex2d(0.0, -10.0);
+	glVertex2d(0.0, 10.0);
+	glEnd();
+	glColor3f(0.0, 1.0, 0.0);
+	//Начальные условия модели 2 
+	double z0 = 0.0;
+	double vz = 0.0;
+	double alpha = pi / 3;
+	double q = 5;
+	double m = 0.05;
+	double v = 300;
+	double B = 100;
+	double R = 0.05;
+	double x0 = 0.0, y0 = R;
+	double v0x = v, v0y = 0.0;
+	double vx, vy;
+	double x, y;
+	x = x0;
+	y = y0;
+	v0x = v * sin(alpha), v0y = 0.0*sin(alpha);
+	vz = v * cos(alpha);
+	vx = v0x - (q*B*v0y / m)*step / 2;
+	vx = vx * sin(alpha);
+	vy = v0y - (-q * B*v0x / m)*step / 2;
+	vy = vy * sin(alpha);
+	double z = z0;
+	glBegin(GL_POINTS);
+	glVertex2d(x, z);
+	glEnd();
+	for (double t = step; t < step * 1000; t += step)
+	{
+		glBegin(GL_LINES);
+		glVertex2d(x, z);
+		vx = vx - (q*B*vy / m)*step;
+		vy = vy - (-q * B*vx / m)*step;
+		x = x + vx * step;
+		y = y + vy * step;
+		z = z + vz * step;
+		glVertex2d(x, z);
+		glEnd();
+	}
+}
+void change_size_yz(GLsizei w, GLsizei h)
+{
+	double wh = 0.01;
+	GLdouble
+		aspect_ratio;
+	if (h == 0)
+		h = 1;
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	aspect_ratio = (GLdouble)w / (GLdouble)h;
+	if (w <= h)
+		glOrtho(18 * wh, 18 * wh, -18 * wh / aspect_ratio, 18 * wh / aspect_ratio, -1.0, 1.0);
+	else
+		glOrtho(-18 * wh*aspect_ratio, 18 * wh*aspect_ratio,
+			-18 * wh, 18 * wh, -1.0, 1.0);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+void display_yz()
+{
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0.5, 0.5, 0.5);
+	for (double i = -10; i <= 10; i += step * 10000)
+	{
+		glBegin(GL_LINES);
+		glVertex2d(i, -10.0);
+		glVertex2d(i, 10.0);
+		glEnd();
+	}
+	for (double i = -10; i <= 10; i += step * 10000)
+	{
+		glBegin(GL_LINES);
+		glVertex2d(-10.0, i);
+		glVertex2d(10.0, i);
+		glEnd();
+	}
+	glColor3f(1.0, 0.0, 0.0);
+	glBegin(GL_LINES);
+	glVertex2d(-10.0, 0.0);
+	glVertex2d(10.0, 0.0);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex2d(0.0, -10.0);
+	glVertex2d(0.0, 10.0);
+	glEnd();
+	glColor3f(1.0, 1.0, 0.0);
+	//Начальные условия модели 2 
+	double z0 = 0.0;
+	double vz = 0.0;
+	double alpha = pi / 3;
+	double q = 5;
+	double m = 0.05;
+	double v = 300;
+	double B = 100;
+	double R = 0.05;
+	double x0 = 0.0, y0 = R;
+	double v0x = v, v0y = 0.0;
+	double vx, vy;
+	double x, y;
+	x = x0;
+	y = y0;
+	v0x = v * sin(alpha), v0y = 0.0*sin(alpha);
+	vz = v * cos(alpha);
+	vx = v0x - (q*B*v0y / m)*step / 2;
+	vx = vx * sin(alpha);
+	vy = v0y - (-q * B*v0x / m)*step / 2;
+	vy = vy * sin(alpha);
+	double z = z0;
+	glBegin(GL_POINTS);
+	glVertex2d(y, z);
+	glEnd();
+	for (double t = step; t < step * 1000; t += step)
+	{
+		glBegin(GL_LINES);
+		glVertex2d(y, z);
+		vx = vx - (q*B*vy / m)*step;
+		vy = vy - (-q * B*vx / m)*step;
+		x = x + vx * step;
+		y = y + vy * step;
+		z = z + vz * step;
+		glVertex2d(y, z);
+		glEnd();
+	}
+}
+void my_init()
+{
+	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glEnable(GL_DEPTH_TEST);
+}
+int main(int argc, char ** argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
-	glutInitWindowPosition(0, 0);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(1280, 720);
-	glutCreateWindow("Oscillatory circuit");
-
-	glutKeyboardFunc(keyboard_func);
-	glutDisplayFunc(render_scene);
-	glutReshapeFunc(change_size);
+	glutInitWindowPosition(0, 0);
+	glutCreateWindow("Движение заряженной частицы в магнитном поле: скорость частицы составляет угол pi/2 с вектором магнитной индукции");
+	glutDisplayFunc(display_xy);
+	glutReshapeFunc(change_size_xy);
 	initialise();
+	glutCreateWindow("2 случай, график y(x)");
+	glutDisplayFunc(display_xy2);
+	glutReshapeFunc(change_size_xy2);
+	initialise();
+	glutCreateWindow("2 случай, график z(x)");
+	glutDisplayFunc(display_xz);
+	glutReshapeFunc(change_size_xz);
+	initialise();
+	glutCreateWindow("2 случай, график z(y)");
+	glutDisplayFunc(display_yz);
+	glutReshapeFunc(change_size_yz);
+	initialise();
+	glutCreateWindow("Движение заряженной частицы в магнитном поле: скорость составляет с вектором магнитной индукции произвольный угол");
+	my_init();
+	glutDisplayFunc(display_xyz);
+	glutReshapeFunc(change_size_xyz);
+	glutIdleFunc(Rotate);
 	glutMainLoop();
 	return 0;
 }

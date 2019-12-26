@@ -7,10 +7,10 @@ using namespace std;
 //Конструктор
 archive::archive(unsigned int max_nd)
 {
-	Max_Num_Documents = max_nd;  
-	documents = new document * [Max_Num_Documents];
+	Max_Num_Documents = max_nd;
+	documents = new document *[Max_Num_Documents];
 	Num_Documents = 0;
-	cout << "\nВызван конструктор класса archive:";  
+	cout << "\nВызван конструктор класса archive:";
 	cout << "\nвыделено объектов - " << Max_Num_Documents;
 	cout << " загружено документов - " << Num_Documents << endl;
 }
@@ -21,18 +21,24 @@ archive::~archive()
 	Max_Num_Documents = 0;
 	delete[] documents;
 	Num_Documents = 0;
-	cout << "\nВызван деструктор класса archive:";  
+	cout << "\nВызван деструктор класса archive:";
 	cout << "\n выделенная память освобождена";
 }
 
 //Чтение документов из файла
 void archive::read_documents(istream & stream)
-{ 
+{
 	int Count_File;
 	stream >> Count_File;
 	for (int i = Num_Documents; i < Count_File; i++)
 	{
-		documents[i] = new IssuedDocument();
+		string label;
+		stream >> label;
+		if (label.compare(SimpleDocumentLabel) == 0)
+			documents[i] = new document();
+		else if(label.compare(IssuedDocumentLable) == 0)
+			documents[i] = new IssuedDocument();
+		
 		documents[i]->read_document(stream);
 		// Метод read_document виртуальный - будет вызван метод именно того класса, на объект которого указывает documents[i].
 	}
@@ -42,12 +48,13 @@ void archive::read_documents(istream & stream)
 
 //Вывести таблицу на экран
 void archive::display_all()
-{ 
+{
 	Head();
 	for (int i = 0; i < Num_Documents; i++)
-	{ 
-		cout << "|" << left << setw(2) << i+1;
-		documents[i]->display(); 
+	{
+		cout << "|" << left << setw(2) << i + 1;
+		documents[i]->display();
+		cout << "\n+--+-----------+-----------+-----------------+----+-------+-------+------+------+----+" << endl;
 	}
 }
 
@@ -93,15 +100,20 @@ void archive::in_file()
 	file << Num_Documents << endl;
 	for (int i = 0; i < Num_Documents; i++)
 	{
-		file << documents[i];
+		if (typeid(*(documents[i])) == typeid(document))
+			file << SimpleDocumentLabel << endl; // Вывести метку простого документа.
+		else if (typeid(*(documents[i])) == typeid(IssuedDocument)) // Сравнение типа имеющегося объекта с иллюстрированной книгой.
+			file << IssuedDocumentLable << endl; // Вывести метку документа с информацией о выдаче.
+		
+		documents[i]->infile(file);
 	}
-	cout << "\nДанные перезаписаны в файл " << "Documents.txt" << ":";  
+	cout << "\nДанные перезаписаны в файл " << "Documents.txt" << ":";
 	cout << "\n    число записанных документов - " << "Documents.txt" << endl;
 	file.close();
 }
 
 //Первое задание
-void archive::First() 
+void archive::First()
 {
 	Head();
 	for (int i = 0; i < Num_Documents; i++)
@@ -110,12 +122,13 @@ void archive::First()
 		{
 			cout << "|" << left << setw(2) << i + 1;
 			documents[i]->display();
+			cout << "\n+--+-----------+-----------+-----------------+----+-------+-------+------+------+----+" << endl;
 		}
 	}
 }
 
 //Второе задание
-void archive::Second() 
+void archive::Second()
 {
 	Head();
 	for (int i = 0; i < Num_Documents; i++)
@@ -124,11 +137,13 @@ void archive::Second()
 		{
 			cout << "|" << left << setw(2) << i + 1;
 			documents[i]->display();
+			cout << "\n+--+-----------+-----------+-----------------+----+-------+-------+------+------+----+" << endl;
 		}
 	}
 }
 
-
+string archive ::SimpleDocumentLabel = "SD"; // Метка для документов базового типа.
+string archive ::IssuedDocumentLable = "IB"; // Метка для документов с известной информацией о выдаче.
 
 
 

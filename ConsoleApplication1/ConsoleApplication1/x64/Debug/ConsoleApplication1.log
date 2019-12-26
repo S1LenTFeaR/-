@@ -1,7 +1,0 @@
-﻿  IssuedDocument.h
-x64\Debug\IssuedDocument.obj : warning LNK4042: объект указан более одного раза; лишние не учитываются
-Archive.obj : error LNK2001: неразрешенный внешний символ ""public: virtual void __cdecl IssuedDocument::read_document(class std::basic_istream<char,struct std::char_traits<char> > &)" (?read_document@IssuedDocument@@UEAAXAEAV?$basic_istream@DU?$char_traits@D@std@@@std@@@Z)"
-Archive.obj : error LNK2001: неразрешенный внешний символ ""public: virtual void __cdecl IssuedDocument::read_document(void)" (?read_document@IssuedDocument@@UEAAXXZ)"
-Archive.obj : error LNK2001: неразрешенный внешний символ ""public: virtual void __cdecl IssuedDocument::infile(class std::basic_ostream<char,struct std::char_traits<char> > &)const " (?infile@IssuedDocument@@UEBAXAEAV?$basic_ostream@DU?$char_traits@D@std@@@std@@@Z)"
-Archive.obj : error LNK2001: неразрешенный внешний символ ""public: virtual void __cdecl IssuedDocument::display(void)" (?display@IssuedDocument@@UEAAXXZ)"
-C:\Users\kille\Desktop\-\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe : fatal error LNK1120: неразрешенных внешних элементов: 4

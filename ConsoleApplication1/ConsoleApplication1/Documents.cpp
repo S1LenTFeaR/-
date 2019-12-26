@@ -2,6 +2,23 @@
 #include "Documents.h"
 using namespace std;
 
+document::document(string nme, int acc, string adr, int cou, double tar, double lir, double tpr)
+{
+	name = nme;
+	account = acc;
+	address = adr;
+	count = cou;
+	total_area = tar;
+	living_area = lir;
+	total_price = tpr;
+	cout << "\nВызван конструктор класса document" << endl;
+}
+
+document::~document()
+{
+	cout << "\nВызван деконструктор класса document" << endl;
+}
+
 //Геттер
 double document::get_total_price()
 {
@@ -67,7 +84,8 @@ void document::display()
 	cout << "|" << left << setw(4) << count;
 	cout << "|" << left << setw(7) << total_area;
 	cout << "|" << left << setw(7) << living_area;
-	cout << "|" << left << setw(6) << total_price << endl;
+	cout << "|" << left << setw(6) << total_price << "|";
+
 }
 
 //Запись документа в файл
@@ -88,28 +106,11 @@ void document::infile(ostream & stream) const
 bool document::operator==(const document & another)
 {
 	return
-		another.name == name &&
+		another.name.compare(address) == 0 &&
 		another.account == account &&
-		another.address == address &&
+		another.address.compare(address) == 0 &&
 		another.count == count &&
 		another.total_area == total_area &&
 		another.living_area == living_area &&
 		another.total_price == total_price;
-}
-
-document::document(string nme, int acc, string adr, int cou, double tar, double lir , double tpr)
-{ 
-	name = nme;
-	account = acc;
-	address = adr;
-	count = cou;
-	total_area = tar;
-	living_area = lir;
-	total_price = tpr;
-	cout << "\nВызван конструктор класса document"; 
-}
-
-document::~document()
-{
-	cout << "\nВызван деконструктор класса document";
 }

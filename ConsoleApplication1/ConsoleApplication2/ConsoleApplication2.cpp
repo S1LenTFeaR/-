@@ -1,68 +1,148 @@
-﻿#include "pch.h"
-#include <clocale>
-#include <cstdlib>
-#include <cstring>
-#include <iomanip>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <cmath>
-
+﻿//#include "stdafx.h"
+#include "pch.h"
+#include "Archive.h"
+#include <locale> // поддержка русского алфавита
+#include <iostream> // потоковый ввод/вывод с консоли
+#include <fstream> // файловые потоки
+#include <string> // текстовые строки С++
+#include <iomanip> // Библиотека для использования манипуляторов ввода-вывода.
+#include <Windows.h> // решение проблем кодировки текста
 
 using namespace std;
 
-float N = 0.0;
-
-double I_0 = 0.0;
-double I = 0.0;
-double Beta = 0.0;
-double Omega_0 = 0.0;
-double q_0 = 0.0;
-double E_max = 0.0;
-double L = 0.0;
-double Omega = 0.0;
-double t = 0.0;
-double dt = 0.00001;
-double t_i = 0.0;
-double q = 0.0;
-double R = 0.0;
-double C = 0.0;
-double nu = 0.0;
-double E = 0.0;
-
-void polet(ofstream & kI, ofstream & kq)
+//Вывод меню на экран и выбор действия
+int SelectAction()
 {
-	I = 0; //Сила тока [А]
-	q = 2 * pow(10, -6); //Заряд конденсатора [Кл]
-	R = 200;
-	L = 0.5; //Индуктивность [Гн]
-	C = 0.5 * pow(10, -6);
-	t = 0;
-	dt = 0.00001;
-	E = 10;
-	Beta = R / (2 * L); //Коэффицент затухания
-	Omega_0 = sqrt(1 / (L * C));
-	Omega = sqrt(Omega_0 * Omega_0 - Beta * Beta);
-	double E_max = 220;
-	I -= (2 * Beta * I + Omega_0 * Omega_0 * q - (E_max * cos(Omega * t) / L)) * (dt / 2.0);
+	int action;
+	cout << "-------------- -------------- --------------" << endl;
+	cout << "Меню:" << endl;
+	cout << " 1" << " / " << "Вывести содержимое архива на экран." << endl;
+	cout << " 2" << " / " << "Добавить документ." << endl;
+	cout << " 3" << " / " << "Добавить документ с иформацией о выдаче." << endl;
+	cout << " 4" << " / " << "Удалить документы." << endl;
+	cout << " 5" << " / " << "Задание 1." << endl;
+	cout << " 6" << " / " << "Задание 2." << endl;
+	cout << " 7" << " / " << "Выход из программы." << endl;
+	cout << "Введите номер действия: ";
+	cin >> action;
+	return action;
+}
 
-	while (t <= 3)
+//Шапка
+void Head()
+{
+	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+------+----+" << endl;
+	cout << left << setw(3) << "|№";
+	cout << left << setw(12) << "|Имя";
+	cout << left << setw(12) << "|Л.Счет";
+	cout << left << setw(18) << "|Адрес";
+	cout << left << setw(5) << "|Уч-в";
+	cout << left << setw(8) << "|S общая";
+	cout << left << setw(8) << "|S жилая";
+	cout << left << setw(7) << "|Оплата";
+	cout << left << setw(7) << "|Место";
+	cout << left << setw(5) << "|Год" << "|" << endl;
+	cout << "+--+-----------+-----------+-----------------+----+-------+-------+------+------+----+" << endl;
+}
+// Функция для чтения списка документов из потока.
+void ReadDocuments(archive & my_archive)
+{
+	ifstream file("Documents.txt");
+	my_archive.read_documents(file);
+	file.close();
+}
+//Перезапись файла
+void in_file(archive & my_archive)
+{
+	int n;
+	cout << "Перезаписать получившуюся таблицу в файл?" << endl;
+	cout << "Нажмите 1, чтобы перезаписать." << endl;
+	cout << "Нажмите другую кнопку, чтобы выйти из программы." << endl;
+	cin >> n;
+	switch (n)
 	{
-		I -= (2 * Beta * I + Omega_0 * Omega_0 * q - (E_max * cos(Omega * t) / L)) * dt;
-		q = q + I * dt;
-		E = E_max * cos(Omega * t);
-		t += dt;
-		kI << fixed << setprecision(3) << t * 2500 << ";" << setprecision(3) << I * 30 << endl;
-		kq << fixed << setprecision(3) << t * 2500 << ";" << setprecision(3) << q * 6500 << endl;
+	case 1: // Запись в файл.
+		my_archive.in_file();
+		break;
+	default:
+		n = -1;
 	}
+}
+
+// Функция для удаления документа из списка.
+void RemoveDocument(archive & my_archive)
+{
+	int index, n;
+	string ordered;
+	cout << "Введите номер участника: ";
+	cin >> n;
+	index = n - 1;
+	document * removedDocument = my_archive.remove(index); // Удалить документ из списка.
+	if (removedDocument)
+	{ // Если документ удален.
+		Head();
+		cout << "|  ";
+		removedDocument->display(); // Вывести документ на экран.
+		cout << "\n+--+-----------+-----------+-----------------+----+-------+-------+------+------+----+" << endl;
+		cout << "Документ был удален." << endl;
+		delete removedDocument; // Удалить объект документа.
+	}
+	else
+		cout << "Документ не был удален." << endl;
+}
+
+// Функция для добавления книги в контейнер с удалением объекта в случае неудачи.
+void AddBook(archive & my_archive, document * adocument)
+{
+	adocument->read_document();
+	my_archive.operator +=(adocument); // Добавить документ в контейнер.
+	Head();
+	cout << "|  ";
+	adocument->display(); // Вывести документ в строку таблицы.
+	cout << "\n+--+-----------+-----------+-----------------+----+-------+-------+------+------+----+" << endl;
+	cout << "Документ был добавлен." << endl;
 }
 
 int main()
 {
-	ofstream kI("I.txt");
-	ofstream kq("q.txt");
-	polet(kI, kq);
-	kI.close();
-	kq.close();
+	setlocale(LC_ALL, "rus");
+	SetConsoleCP(1251);
+	SetConsoleOutputCP(1251);
+	archive my_archive(25);
+	ReadDocuments(my_archive);
+	int action;
+	do //Открываем меню заново до выхода из программы
+	{
+		action = SelectAction();
+		cout << "-------------- -------------- --------------" << endl;
+		switch (action)
+		{
+		case 1: // Вывести на экран.
+			my_archive.display_all();
+			break;
+		case 2: // Добавить документ в коллекцию.
+			AddBook(my_archive, new document());
+			break;
+		case 3: // Добавить документ с информацией о выдаче в коллекцию.
+			AddBook(my_archive, new IssuedDocument());
+			break;
+		case 4: // Удалить документ из коллекции 
+			RemoveDocument(my_archive);
+			break;
+		case 5: // Вывести задание 1
+			my_archive.First();
+			break;
+		case 6: // Вывести задание 2
+			my_archive.Second();
+			break;
+		
+		default:
+			action = -1;
+		}
+	} while (action != -1);
+	in_file(my_archive);
 	return 0;
 }
+
+
+
