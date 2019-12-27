@@ -4,11 +4,11 @@
 #include<clocale> 
 #include<cmath> 
 using namespace std;
-#define step 0.00001 
+#define dt 0.00001 
 #define pi 3.14159 
 void initialise()
 {
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
 }
 void change_size_xy(GLsizei w, GLsizei h)
 {
@@ -31,21 +31,21 @@ void display_xy()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.5, 0.5, 0.5);
-	for (double i = -10; i <= 10; i += step * 10000)
+	for (double i = -10; i <= 10; i += dt * 10000)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(i, -10.0);
 		glVertex2d(i, 10.0);
 		glEnd();
 	}
-	for (double i = -10; i <= 10; i += step * 10000)
+	for (double i = -10; i <= 10; i += dt * 10000)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(-10.0, i);
 		glVertex2d(10.0, i);
 		glEnd();
 	}
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINES);
 	glVertex2d(-10.0, 0.0);
 	glVertex2d(10.0, 0.0);
@@ -54,8 +54,8 @@ void display_xy()
 	glVertex2d(0.0, -10.0);
 	glVertex2d(0.0, 10.0);
 	glEnd();
-	glColor3f(1.0, 0.0, 1.0);
-	//Начальные условия модели 1 
+	glColor3f(0.42, 1, 0.95);
+	//Модель 1
 	double q = 5;
 	double m = 0.05;
 	double v = 300;
@@ -70,16 +70,16 @@ void display_xy()
 	glBegin(GL_POINTS);
 	glVertex2d(x, y);
 	glEnd();
-	vx = v0x - (q*B*v0y / m)*step / 2;
-	vy = v0y - (-q * B*v0x / m)*step / 2;
-	for (double t = step; t < step * 1000; t += step)
+	vx = v0x - (q*B*v0y / m)*dt / 2;
+	vy = v0y - (-q * B*v0x / m)*dt / 2;
+	for (double t = dt; t < dt * 1000; t += dt)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(x, y);
-		vx = vx - (q*B*vy / m)*step;
-		vy = vy - (-q * B*vx / m)*step;
-		x = x + vx * step;
-		y = y + vy * step;
+		vx = vx - (q*B*vy / m)*dt;
+		vy = vy - (-q * B*vx / m)*dt;
+		x = x + vx * dt;
+		y = y + vy * dt;
 		glVertex2d(x, y);
 		glEnd();
 	}
@@ -121,7 +121,7 @@ void display_xyz()
 	glLoadIdentity();
 	look();
 	glPushMatrix();
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINES);
 	glVertex3d(0.0, 0.0, 0.0);
 	glVertex3d(100.0, 0.0, 0.0);
@@ -136,8 +136,8 @@ void display_xyz()
 	glEnd();
 	glPopMatrix();
 	glPushMatrix();
-	glColor3f(0.0, 1.0, 0.0);
-	//Начальные условия модели 2 
+	glColor3f(0.42, 1, 0.95);
+	//Модель 2
 	double z0 = 0.0;
 	double vz = 0.0;
 	double alpha = pi / 3;
@@ -152,26 +152,29 @@ void display_xyz()
 	double x, y;
 	x = x0;
 	y = y0;
+	
 	v0x = v * sin(alpha), v0y = 0.0*sin(alpha);
 	vz = v * cos(alpha);
-	vx = v0x - (q*B*v0y / m)*step / 2;
+	
+	vx = v0x - (q*B*v0y / m)*dt / 2;
 	vx = vx * sin(alpha);
-	vy = v0y - (-q * B*v0x / m)*step / 2;
+	
+	vy = v0y - (-q * B*v0x / m)*dt / 2;
 	vy = vy * sin(alpha);
 	double z = z0;
 	glBegin(GL_POINTS);
 	glVertex3d(x, y, z);
 	glEnd();
-	for (double t = step;
-		t < step * 1000; t += step)
+	for (double t = dt;
+		t < dt * 1000; t += dt)
 	{
 		glBegin(GL_LINES);
 		glVertex3d(x, y, z);
-		vx = vx - (q*B*vy / m)*step;
-		vy = vy - (-q * B*vx / m)*step;
-		x = x + vx * step;
-		y = y + vy * step;
-		z = z + vz * step;
+		vx = vx - (q*B*vy / m)*dt;
+		vy = vy - (-q * B*vx / m)*dt;
+		x = x + vx * dt;
+		y = y + vy * dt;
+		z = z + vz * dt;
 		glVertex3d(x, y, z);
 		glEnd();
 	}
@@ -199,21 +202,21 @@ void display_xy2()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.5, 0.5, 0.5);
-	for (double i = -10; i <= 10; i += step * 10000)
+	for (double i = -10; i <= 10; i += dt * 10000)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(i, -10.0);
 		glVertex2d(i, 10.0);
 		glEnd();
 	}
-	for (double i = -10; i <= 10; i += step * 10000)
+	for (double i = -10; i <= 10; i += dt * 10000)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(-10.0, i);
 		glVertex2d(10.0, i);
 		glEnd();
 	}
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINES);
 	glVertex2d(-10.0, 0.0);
 	glVertex2d(10.0, 0.0);
@@ -222,8 +225,8 @@ void display_xy2()
 	glVertex2d(0.0, -10.0);
 	glVertex2d(0.0, 10.0);
 	glEnd();
-	glColor3f(0.0, 1.0, 1.0);
-	//Начальные условия модели 2 
+	glColor3f(0.42, 1, 0.95);
+	//Модель 2
 	double z0 = 0.0;
 	double vz = 0.0;
 	double alpha = pi / 3;
@@ -240,23 +243,23 @@ void display_xy2()
 	y = y0;
 	v0x = v * sin(alpha), v0y = 0.0*sin(alpha);
 	vz = v * cos(alpha);
-	vx = v0x - (q*B*v0y / m)*step / 2;
+	vx = v0x - (q*B*v0y / m)*dt / 2;
 	vx = vx * sin(alpha);
-	vy = v0y - (-q * B*v0x / m)*step / 2;
+	vy = v0y - (-q * B*v0x / m)*dt / 2;
 	vy = vy * sin(alpha);
 	double z = z0;
 	glBegin(GL_POINTS);
 	glVertex2d(x, y);
 	glEnd();
-	for (double t = step; t < step * 1000; t += step)
+	for (double t = dt; t < dt * 1000; t += dt)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(x, y);
-		vx = vx - (q*B*vy / m)*step;
-		vy = vy - (-q * B*vx / m)*step;
-		x = x + vx * step;
-		y = y + vy * step;
-		z = z + vz * step;
+		vx = vx - (q*B*vy / m)*dt;
+		vy = vy - (-q * B*vx / m)*dt;
+		x = x + vx * dt;
+		y = y + vy * dt;
+		z = z + vz * dt;
 		glVertex2d(x, y);
 		glEnd();
 	}
@@ -282,21 +285,21 @@ void display_xz()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.5, 0.5, 0.5);
-	for (double i = -10; i <= 10; i += step * 10000)
+	for (double i = -10; i <= 10; i += dt * 10000)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(i, -10.0);
 		glVertex2d(i, 10.0);
 		glEnd();
 	}
-	for (double i = -10; i <= 10; i += step * 10000)
+	for (double i = -10; i <= 10; i += dt * 10000)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(-10.0, i);
 		glVertex2d(10.0, i);
 		glEnd();
 	}
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINES);
 	glVertex2d(-10.0, 0.0);
 	glVertex2d(10.0, 0.0);
@@ -305,8 +308,8 @@ void display_xz()
 	glVertex2d(0.0, -10.0);
 	glVertex2d(0.0, 10.0);
 	glEnd();
-	glColor3f(0.0, 1.0, 0.0);
-	//Начальные условия модели 2 
+	glColor3f(0.42, 1, 0.95);
+	//Модель 2
 	double z0 = 0.0;
 	double vz = 0.0;
 	double alpha = pi / 3;
@@ -323,23 +326,23 @@ void display_xz()
 	y = y0;
 	v0x = v * sin(alpha), v0y = 0.0*sin(alpha);
 	vz = v * cos(alpha);
-	vx = v0x - (q*B*v0y / m)*step / 2;
+	vx = v0x - (q*B*v0y / m)*dt / 2;
 	vx = vx * sin(alpha);
-	vy = v0y - (-q * B*v0x / m)*step / 2;
+	vy = v0y - (-q * B*v0x / m)*dt / 2;
 	vy = vy * sin(alpha);
 	double z = z0;
 	glBegin(GL_POINTS);
 	glVertex2d(x, z);
 	glEnd();
-	for (double t = step; t < step * 1000; t += step)
+	for (double t = dt; t < dt * 1000; t += dt)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(x, z);
-		vx = vx - (q*B*vy / m)*step;
-		vy = vy - (-q * B*vx / m)*step;
-		x = x + vx * step;
-		y = y + vy * step;
-		z = z + vz * step;
+		vx = vx - (q*B*vy / m)*dt;
+		vy = vy - (-q * B*vx / m)*dt;
+		x = x + vx * dt;
+		y = y + vy * dt;
+		z = z + vz * dt;
 		glVertex2d(x, z);
 		glEnd();
 	}
@@ -367,21 +370,21 @@ void display_yz()
 {
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(0.5, 0.5, 0.5);
-	for (double i = -10; i <= 10; i += step * 10000)
+	for (double i = -10; i <= 10; i += dt * 10000)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(i, -10.0);
 		glVertex2d(i, 10.0);
 		glEnd();
 	}
-	for (double i = -10; i <= 10; i += step * 10000)
+	for (double i = -10; i <= 10; i += dt * 10000)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(-10.0, i);
 		glVertex2d(10.0, i);
 		glEnd();
 	}
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_LINES);
 	glVertex2d(-10.0, 0.0);
 	glVertex2d(10.0, 0.0);
@@ -390,7 +393,7 @@ void display_yz()
 	glVertex2d(0.0, -10.0);
 	glVertex2d(0.0, 10.0);
 	glEnd();
-	glColor3f(1.0, 1.0, 0.0);
+	glColor3f(0.42, 1, 0.95);
 	//Начальные условия модели 2 
 	double z0 = 0.0;
 	double vz = 0.0;
@@ -408,30 +411,30 @@ void display_yz()
 	y = y0;
 	v0x = v * sin(alpha), v0y = 0.0*sin(alpha);
 	vz = v * cos(alpha);
-	vx = v0x - (q*B*v0y / m)*step / 2;
+	vx = v0x - (q*B*v0y / m)*dt / 2;
 	vx = vx * sin(alpha);
-	vy = v0y - (-q * B*v0x / m)*step / 2;
+	vy = v0y - (-q * B*v0x / m)*dt / 2;
 	vy = vy * sin(alpha);
 	double z = z0;
 	glBegin(GL_POINTS);
 	glVertex2d(y, z);
 	glEnd();
-	for (double t = step; t < step * 1000; t += step)
+	for (double t = dt; t < dt * 1000; t += dt)
 	{
 		glBegin(GL_LINES);
 		glVertex2d(y, z);
-		vx = vx - (q*B*vy / m)*step;
-		vy = vy - (-q * B*vx / m)*step;
-		x = x + vx * step;
-		y = y + vy * step;
-		z = z + vz * step;
+		vx = vx - (q*B*vy / m)*dt;
+		vy = vy - (-q * B*vx / m)*dt;
+		x = x + vx * dt;
+		y = y + vy * dt;
+		z = z + vz * dt;
 		glVertex2d(y, z);
 		glEnd();
 	}
 }
 void my_init()
 {
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glEnable(GL_DEPTH_TEST);
 }
 int main(int argc, char ** argv)
@@ -440,23 +443,23 @@ int main(int argc, char ** argv)
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(1280, 720);
 	glutInitWindowPosition(0, 0);
-	glutCreateWindow("Движение заряженной частицы в магнитном поле: скорость частицы составляет угол pi/2 с вектором магнитной индукции");
+	glutCreateWindow("Случай 1, график y(x)");
 	glutDisplayFunc(display_xy);
 	glutReshapeFunc(change_size_xy);
 	initialise();
-	glutCreateWindow("2 случай, график y(x)");
+	glutCreateWindow("Случай 2, график y(x)");
 	glutDisplayFunc(display_xy2);
 	glutReshapeFunc(change_size_xy2);
 	initialise();
-	glutCreateWindow("2 случай, график z(x)");
+	glutCreateWindow("Случай 2, график z(x)");
 	glutDisplayFunc(display_xz);
 	glutReshapeFunc(change_size_xz);
 	initialise();
-	glutCreateWindow("2 случай, график z(y)");
+	glutCreateWindow("Случай 2, график z(y)");
 	glutDisplayFunc(display_yz);
 	glutReshapeFunc(change_size_yz);
 	initialise();
-	glutCreateWindow("Движение заряженной частицы в магнитном поле: скорость составляет с вектором магнитной индукции произвольный угол");
+	glutCreateWindow("Случай 2 в трехмерном пространстве");
 	my_init();
 	glutDisplayFunc(display_xyz);
 	glutReshapeFunc(change_size_xyz);
